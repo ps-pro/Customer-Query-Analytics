@@ -1,0 +1,267 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\title{\textbf{Mathematical Foundations of Inter-Annotator Agreement Analysis:\\ Comprehensive Framework for Hierarchical Label Assessment}}
+\author{Technical Report}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This report presents the complete mathematical framework underlying inter-annotator agreement (IAA) analysis for hierarchical labeling tasks. We formalize the computational approaches for three critical analysis dimensions: overall agreement across all items, frequency-stratified agreement analysis, and hierarchical facet comparisons. The framework encompasses both chance-corrected metrics (Krippendorff's $\alpha$) and simple percentage agreement measures, providing a comprehensive foundation for reliability assessment in annotation tasks.
+\end{abstract}
+
+\section{Introduction and Notation}
+
+Let $D = \{d_1, d_2, \ldots, d_n\}$ represent a set of $n$ documents to be annotated, and $A = \{a_1, a_2, \ldots, a_m\}$ represent a set of $m$ annotators. For hierarchical labeling tasks, each annotation consists of a tuple $(L_1, L_2)$ where $L_1$ represents the parent category and $L_2$ represents the child category.
+
+\subsection{Data Structure}
+
+The annotation data can be represented as a matrix $X \in \mathbb{R}^{m \times n}$ where:
+\begin{equation}
+X_{ij} = \text{label assigned by annotator } a_i \text{ to document } d_j
+\end{equation}
+
+For hierarchical analysis, we define three label spaces:
+\begin{align}
+\mathcal{L}_{\text{full}} &= \{(l_1, l_2) : l_1 \in \mathcal{L}_1, l_2 \in \mathcal{L}_2\} \\
+\mathcal{L}_1 &= \{\text{parent categories}\} \\
+\mathcal{L}_2 &= \{\text{child categories}\}
+\end{align}
+
+\section{Krippendorff's Alpha: Chance-Corrected Agreement}
+
+\subsection{General Formulation}
+
+Krippendorff's $\alpha$ is defined as:
+\begin{equation}
+\alpha = 1 - \frac{D_o}{D_e}
+\end{equation}
+
+where $D_o$ is the observed disagreement and $D_e$ is the expected disagreement under the assumption of independence.
+
+\subsection{Observed Disagreement}
+
+For nominal data, the observed disagreement is calculated as:
+\begin{equation}
+D_o = \frac{1}{\sum_{c,k} o_{ck}} \sum_{c \neq k} o_{ck} \delta_{ck}
+\end{equation}
+
+where:
+\begin{itemize}
+\item $o_{ck}$ represents the frequency of ordered pairs $(c,k)$ in the data
+\item $\delta_{ck}$ is the difference function (for nominal data: $\delta_{ck} = 1$ if $c \neq k$, else $0$)
+\end{itemize}
+
+\subsection{Expected Disagreement}
+
+The expected disagreement under independence is:
+\begin{equation}
+D_e = \frac{1}{\sum_{c,k} n_c n_k} \sum_{c \neq k} n_c n_k \delta_{ck}
+\end{equation}
+
+where $n_c$ is the marginal frequency of category $c$ across all annotators and documents.
+
+\subsection{Computational Algorithm}
+
+\begin{algorithm}
+\caption{Krippendorff's Alpha Calculation}
+\begin{algorithmic}[1]
+\REQUIRE Reliability data matrix $X \in \mathbb{R}^{m \times n}$
+\ENSURE $\alpha$ value
+\STATE Encode categorical labels to numeric values
+\STATE Create coincidence matrix $C$ from ordered pairs
+\STATE Calculate observed frequencies $o_{ck}$
+\STATE Calculate marginal frequencies $n_c$
+\STATE Compute $D_o = \frac{\sum_{c \neq k} o_{ck}}{\sum_{c,k} o_{ck}}$
+\STATE Compute $D_e = \frac{\sum_{c \neq k} n_c n_k}{\sum_{c,k} n_c n_k}$
+\STATE \RETURN $\alpha = 1 - \frac{D_o}{D_e}$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Percentage Agreement Metrics}
+
+\subsection{Overall Percentage Agreement}
+
+The overall percentage agreement is defined as:
+\begin{equation}
+P_{\text{overall}} = \frac{1}{n} \sum_{j=1}^{n} \mathbf{1}_{\{x_{1j} = x_{2j} = \cdots = x_{mj}\}}
+\end{equation}
+
+where $\mathbf{1}_{\{\cdot\}}$ is the indicator function.
+
+\subsection{Pairwise Agreement Matrix}
+
+For annotators $a_i$ and $a_k$, the pairwise agreement is:
+\begin{equation}
+P_{ik} = \frac{1}{n} \sum_{j=1}^{n} \mathbf{1}_{\{x_{ij} = x_{kj}\}}
+\end{equation}
+
+The complete pairwise agreement matrix is:
+\begin{equation}
+\mathbf{P} = \begin{pmatrix}
+1 & P_{12} & \cdots & P_{1m} \\
+P_{21} & 1 & \cdots & P_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+P_{m1} & P_{m2} & \cdots & 1
+\end{pmatrix}
+\end{equation}
+
+\section{Frequency-Based Stratification Analysis}
+
+\subsection{Label Frequency Distribution}
+
+Let $f_\ell$ denote the frequency of label $\ell$ across all annotations:
+\begin{equation}
+f_\ell = \sum_{i=1}^{m} \sum_{j=1}^{n} \mathbf{1}_{\{x_{ij} = \ell\}}
+\end{equation}
+
+\subsection{Frequency-Based Stratification}
+
+Define frequency quantiles $Q_1, Q_2, \ldots, Q_{k-1}$ to partition labels into $k$ frequency strata:
+\begin{align}
+\mathcal{S}_1 &= \{\ell : f_\ell \leq Q_1\} \quad \text{(rare labels)} \\
+\mathcal{S}_2 &= \{\ell : Q_1 < f_\ell \leq Q_2\} \quad \text{(moderate labels)} \\
+&\vdots \\
+\mathcal{S}_k &= \{\ell : f_\ell > Q_{k-1}\} \quad \text{(common labels)}
+\end{align}
+
+\subsection{Stratified Agreement Analysis}
+
+For each stratum $\mathcal{S}_s$, create a subset of data:
+\begin{equation}
+X^{(s)} = \{x_{ij} : x_{ij} \in \mathcal{S}_s \text{ for some annotator}\}
+\end{equation}
+
+Calculate stratum-specific agreement:
+\begin{equation}
+\alpha^{(s)} = \text{KrippendorffAlpha}(X^{(s)})
+\end{equation}
+
+\section{Hierarchical Facet Analysis}
+
+\subsection{Parent-Child Agreement Decomposition}
+
+For hierarchical labels $(L_1, L_2)$, we analyze agreement at three levels:
+
+\subsubsection{Parent Level Analysis}
+Extract parent labels: $X^{(1)}_{ij} = \pi_1(X_{ij})$ where $\pi_1$ is the projection onto the first component.
+
+\subsubsection{Child Level Analysis}
+Extract child labels: $X^{(2)}_{ij} = \pi_2(X_{ij})$ where $\pi_2$ is the projection onto the second component.
+
+\subsubsection{Full Hierarchical Analysis}
+Use complete tuples: $X^{(\text{full})}_{ij} = X_{ij} = (L_1, L_2)$.
+
+\subsection{Hierarchical Consistency Metric}
+
+Define the hierarchical consistency as:
+\begin{equation}
+\gamma = \frac{\alpha^{(\text{full})}}{\max(\alpha^{(1)}, \alpha^{(2)})}
+\end{equation}
+
+where $\gamma \in [0, 1]$ measures how well the hierarchical structure preserves agreement.
+
+\subsection{Conditional Agreement Analysis}
+
+For parent category $\ell_1 \in \mathcal{L}_1$, the conditional child agreement is:
+\begin{equation}
+\alpha^{(2|\ell_1)} = \text{KrippendorffAlpha}(\{x_{ij} : \pi_1(x_{ij}) = \ell_1\})
+\end{equation}
+
+\section{Statistical Properties and Confidence Intervals}
+
+\subsection{Bootstrap Confidence Intervals}
+
+For any agreement metric $\theta$ (e.g., $\alpha$, $P_{\text{overall}}$), construct $(1-\gamma)$ confidence intervals using bootstrap resampling:
+
+\begin{algorithm}
+\caption{Bootstrap Confidence Interval}
+\begin{algorithmic}[1]
+\REQUIRE Data matrix $X$, confidence level $(1-\gamma)$, bootstrap samples $B$
+\ENSURE Confidence interval $[L, U]$
+\FOR{$b = 1$ to $B$}
+    \STATE Sample documents with replacement: $D^{(b)} \sim D$
+    \STATE Compute $\theta^{(b)} = \text{Agreement}(X^{(b)})$
+\ENDFOR
+\STATE Sort $\{\theta^{(1)}, \ldots, \theta^{(B)}\}$
+\STATE $L = \text{quantile}(\gamma/2)$, $U = \text{quantile}(1-\gamma/2)$
+\STATE \RETURN $[L, U]$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Variance Estimation}
+
+For large samples, the asymptotic variance of Krippendorff's $\alpha$ can be approximated using the delta method:
+\begin{equation}
+\text{Var}(\alpha) \approx \left(\frac{\partial \alpha}{\partial D_o}\right)^2 \text{Var}(D_o) + \left(\frac{\partial \alpha}{\partial D_e}\right)^2 \text{Var}(D_e)
+\end{equation}
+
+\section{Comparative Analysis Framework}
+
+\subsection{Agreement Hierarchy Testing}
+
+Test the hypothesis that parent-level agreement exceeds child-level agreement:
+\begin{align}
+H_0: \alpha^{(1)} &\leq \alpha^{(2)} \\
+H_1: \alpha^{(1)} &> \alpha^{(2)}
+\end{align}
+
+Use permutation testing or bootstrap methods for hypothesis testing.
+
+\subsection{Frequency Effect Analysis}
+
+Model agreement as a function of label frequency:
+\begin{equation}
+\alpha_\ell = \beta_0 + \beta_1 \log(f_\ell) + \epsilon_\ell
+\end{equation}
+
+where $\alpha_\ell$ is the agreement for labels with frequency $f_\ell$.
+
+\section{Implementation Considerations}
+
+\subsection{Computational Complexity}
+
+\begin{itemize}
+\item Krippendorff's $\alpha$: $O(mn \cdot |\mathcal{L}|^2)$ where $|\mathcal{L}|$ is the number of unique labels
+\item Percentage agreement: $O(mn)$
+\item Pairwise matrix: $O(m^2 n)$
+\item Bootstrap intervals: $O(B \cdot \text{base computation})$
+\end{itemize}
+
+\subsection{Numerical Stability}
+
+Handle edge cases:
+\begin{itemize}
+\item When $D_e = 0$: $\alpha$ is undefined; return $\alpha = 1$ if $D_o = 0$
+\item Sparse label distributions: Use additive smoothing
+\item Missing annotations: Exclude from pairwise comparisons
+\end{itemize}
+
+\section{Conclusions}
+
+This mathematical framework provides a comprehensive foundation for IAA analysis across multiple dimensions:
+
+\begin{enumerate}
+\item \textbf{Chance-corrected reliability}: Krippendorff's $\alpha$ accounts for expected agreement by chance
+\item \textbf{Intuitive interpretation}: Percentage agreements complement $\alpha$ with easily interpretable metrics
+\item \textbf{Hierarchical insights}: Parent-child decomposition reveals structure-specific agreement patterns
+\item \textbf{Frequency effects}: Stratification analysis identifies how label rarity affects agreement
+\item \textbf{Statistical rigor}: Bootstrap methods provide robust confidence intervals
+\end{enumerate}
+
+The framework supports comprehensive reliability assessment for complex annotation tasks while maintaining computational efficiency and statistical validity.
+
+\end{document}
