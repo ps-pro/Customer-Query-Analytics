@@ -1,0 +1,132 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\title{\textbf{ADR-01: Business Use Case Selection for Customer Query Analytics}}
+\author{Architecture Decision Record}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Status}
+\textbf{Accepted}
+
+\section{Context}
+
+Customer support operations face critical challenges in ticket routing, annotator quality assessment, and understanding customer pain points. Multiple potential use cases were considered for implementing a comprehensive customer query analytics system:
+
+\subsection{Business Problem}
+\begin{itemize}
+\item Support tickets frequently misrouted due to unclear classification criteria
+\item Annotator performance varies significantly, impacting downstream operations
+\item Customer sentiment and emerging issues remain invisible to management
+\item Manual routing creates bottlenecks and delays response times
+\item No systematic approach to identifying customer risk patterns
+\end{itemize}
+
+\subsection{Alternative Use Cases Considered}
+\begin{enumerate}
+\item \textbf{E-commerce Product Reviews Analysis}: Focus on product feedback and recommendations
+\item \textbf{Social Media Sentiment Monitoring}: Track brand perception across social platforms  
+\item \textbf{Employee Feedback Analysis}: Internal HR sentiment and engagement tracking
+\item \textbf{Customer Support Ticket Classification}: Hierarchical ticket routing and quality assessment
+\item \textbf{Sales Call Transcription Analysis}: Lead qualification and sales process optimization
+\end{enumerate}
+
+\section{Decision}
+
+We selected \textbf{Customer Support Ticket Classification} as the primary use case for the following reasons:
+
+\subsection{Strategic Alignment}
+\begin{itemize}
+\item Direct impact on customer experience and satisfaction metrics
+\item Clear ROI through reduced response times and improved routing accuracy
+\item Addresses immediate operational pain points affecting daily business operations
+\item Scalable solution applicable across multiple product lines and support channels
+\end{itemize}
+
+\subsection{Technical Feasibility}
+\begin{itemize}
+\item Well-defined hierarchical classification structure (L1: Technical/Billing/Account, L2: Specific subtypes)
+\item Measurable success criteria through inter-annotator agreement analysis
+\item Rich dataset enabling comprehensive analytics across multiple dimensions
+\item Clear stakeholder requirements from support management, QA teams, and operations
+\end{itemize}
+
+\subsection{Business Impact}
+\begin{itemize}
+\item \textbf{Operational Efficiency}: Automated routing reduces manual triage time by estimated 60\%
+\item \textbf{Quality Assurance}: Systematic annotator performance assessment enables targeted training
+\item \textbf{Customer Insights}: Sentiment analysis and risk detection provide proactive issue identification
+\item \textbf{Strategic Intelligence}: Topic modeling reveals emerging customer needs and product gaps
+\end{itemize}
+
+\section{Consequences}
+
+\subsection{Positive Outcomes}
+\begin{itemize}
+\item \textbf{Immediate Value}: Support team can implement improved routing within weeks
+\item \textbf{Measurable Results}: Clear KPIs (routing accuracy, response time, customer satisfaction)
+\item \textbf{Scalable Framework}: Architecture extends to other text classification challenges
+\item \textbf{Data-Driven Decisions}: Management gains visibility into customer patterns and annotator performance
+\end{itemize}
+
+\subsection{Trade-offs and Limitations}
+\begin{itemize}
+\item \textbf{Domain Specificity}: Solution optimized for support tickets, requiring adaptation for other use cases
+\item \textbf{Annotation Dependency}: Quality heavily dependent on consistent labeling policies and annotator training
+\item \textbf{Complexity Management}: Multi-dimensional analysis (sentiment, topics, entities) requires careful prioritization
+\item \textbf{Change Management}: Success requires buy-in from support staff and process modifications
+\end{itemize}
+
+\subsection{Rejected Alternatives and Rationale}
+\begin{itemize}
+\item \textbf{E-commerce Reviews}: Lower business priority, existing solutions available
+\item \textbf{Social Media Monitoring}: Requires different technical stack, less direct ROI
+\item \textbf{Employee Feedback}: Sensitive data concerns, different stakeholder requirements
+\item \textbf{Sales Call Analysis}: Technology readiness gaps in speech-to-text pipeline
+\end{itemize}
+
+\section{Implementation Guidelines}
+
+\subsection{Success Metrics}
+\begin{itemize}
+\item Krippendorff's alpha $\geq 0.67$ for acceptable annotation reliability
+\item Routing accuracy improvement of $\geq 25\%$ over baseline manual classification
+\item Customer satisfaction score improvement of $\geq 10\%$ through faster resolution
+\item Annotator consistency improvement measured through reduced pairwise disagreement
+\end{itemize}
+
+\subsection{Key Stakeholders}
+\begin{itemize}
+\item \textbf{Primary}: Customer Support Management, QA Teams
+\item \textbf{Secondary}: Product Teams, Operations Management  
+\item \textbf{Governance}: Data Science Team, IT Architecture
+\end{itemize}
+
+\subsection{Critical Dependencies}
+\begin{itemize}
+\item Consistent labeling policy development and maintenance
+\item Annotator training program aligned with classification schema
+\item Integration capabilities with existing ticketing systems
+\item Change management support for workflow modifications
+\end{itemize}
+
+\section{Review and Evolution}
+
+This decision should be reviewed quarterly based on:
+\begin{itemize}
+\item Business value delivery and KPI achievement
+\item Technical performance and scalability requirements
+\item Changing business priorities and customer needs
+\item Lessons learned from implementation and operation
+\end{itemize}
+
+Future evolution may extend the framework to adjacent use cases such as chat transcripts, email inquiries, or product feedback analysis.
+
+\end{document}

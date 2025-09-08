@@ -1,0 +1,194 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\title{\textbf{ADR-04: Hierarchical Customer Issue Landscape Visualization}}
+\author{Architecture Decision Record}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Status}
+\textbf{Accepted}
+
+\section{Context}
+
+Customer support management requires deep understanding of the relationship between broad issue categories (L1) and specific problem types (L2) to optimize team structure, training programs, and resource allocation. Traditional bar charts fail to effectively communicate the hierarchical nature of customer issues and the relative importance of parent-child relationships.
+
+\subsection{Business Challenge}
+\begin{itemize}
+\item Support managers need to understand both category volumes and internal category composition
+\item Training programs require insight into which L1 categories contain the most diverse L2 subcategories
+\item Resource allocation decisions depend on understanding complexity within each major category
+\item Stakeholder communication needs intuitive visualization of multi-level data structures
+\end{itemize}
+
+\subsection{Visualization Requirements}
+\begin{itemize}
+\item Display hierarchical relationships between L1 categories and L2 subcategories
+\item Maintain proportional representation of actual annotation volumes
+\item Enable interactive exploration of parent-child category relationships
+\item Support professional presentation to executive stakeholders
+\item Provide intuitive understanding without technical training requirements
+\end{itemize}
+
+\section{Decision}
+
+We implemented an \textbf{Interactive Sunburst Chart Visualization} using Plotly Express to represent the customer issue landscape:
+
+\subsection{Core Visualization Strategy}
+\begin{itemize}
+\item \textbf{Sunburst Chart}: Circular, hierarchical visualization with inner ring (L1) and outer ring (L2)
+\item \textbf{Proportional Sizing}: Segment sizes directly reflect annotation frequency counts
+\item \textbf{Color Coding}: Distinct colors for each L1 category extending to their L2 children
+\item \textbf{Interactive Features}: Hover details, click-to-focus, and hierarchical navigation
+\end{itemize}
+
+\subsection{Technical Implementation}
+\begin{itemize}
+\item \textbf{Data Aggregation}: Group annotation data by (L1\_Category, L2\_Category) pairs
+\item \textbf{Path Structure}: Use Plotly's path parameter for natural hierarchical representation
+\item \textbf{Value Mapping}: Annotation counts drive segment proportions automatically
+\item \textbf{Professional Styling}: Vivid color palette with customized hover templates
+\end{itemize}
+
+\subsection{Interaction Design}
+\begin{itemize}
+\item \textbf{Hover Information}: Display category name, mention count, and parent relationship
+\item \textbf{Depth Control}: Maxdepth parameter controls initial display complexity
+\item \textbf{Focus Capability}: Click segments to zoom into specific category hierarchies
+\item \textbf{Context Preservation}: Maintain category relationships during exploration
+\end{itemize}
+
+\section{Rationale}
+
+\subsection{Why Sunburst Over Alternatives}
+\begin{itemize}
+\item \textbf{Hierarchical Clarity}: Natural visual representation of parent-child relationships
+\item \textbf{Proportional Accuracy}: Segment sizes intuitively communicate relative volumes
+\item \textbf{Space Efficiency}: Compact representation accommodating many categories simultaneously
+\item \textbf{Executive Appeal}: Visually striking format effective for stakeholder presentations
+\item \textbf{Interactive Exploration}: Enables detailed investigation without overwhelming initial view
+\end{itemize}
+
+\subsection{Business Value Drivers}
+\begin{itemize}
+\item \textbf{Strategic Planning}: Immediate visibility into category complexity for team structuring
+\item \textbf{Training Optimization}: Identifies L1 categories requiring most diverse L2 expertise
+\item \textbf{Resource Allocation}: Clear understanding of volume distribution within categories
+\item \textbf{Process Improvement}: Reveals opportunities for category consolidation or specialization
+\end{itemize}
+
+\subsection{Alternative Approaches Rejected}
+\begin{itemize}
+\item \textbf{Treemap Visualization}: Less intuitive hierarchy representation, rectangular constraints
+\item \textbf{Nested Bar Charts}: Limited space efficiency, difficult stakeholder interpretation
+\item \textbf{Network Graph}: Overly complex for simple hierarchical relationships
+\item \textbf{Stacked Charts}: Poor proportional representation of nested relationships
+\item \textbf{Traditional Pie Charts}: Cannot effectively represent two-level hierarchies
+\end{itemize}
+
+\section{Consequences}
+
+\subsection{Positive Outcomes}
+\begin{itemize}
+\item \textbf{Stakeholder Engagement}: Executives immediately grasp customer issue landscape structure
+\item \textbf{Strategic Insights}: Clear identification of high-volume, high-complexity categories
+\item \textbf{Training Efficiency}: Targeted skill development based on category composition understanding
+\item \textbf{Resource Optimization}: Data-driven team specialization and capacity planning decisions
+\item \textbf{Communication Excellence}: Single visualization replaces multiple traditional charts
+\end{itemize}
+
+\subsection{Operational Benefits}
+\begin{itemize}
+\item \textbf{Quick Analysis}: Five-minute exploration provides comprehensive landscape understanding
+\item \textbf{Presentation Ready}: Professional visualization suitable for board-level presentations
+\item \textbf{Interactive Investigation}: Detailed exploration capabilities without additional development
+\item \textbf{Scalable Representation}: Framework accommodates growth in category numbers
+\end{itemize}
+
+\subsection{Implementation Trade-offs}
+\begin{itemize}
+\item \textbf{Learning Curve}: Some users require brief orientation to sunburst chart interpretation
+\item \textbf{Print Limitations}: Interactive features lost in static presentation formats
+\item \textbf{Color Dependency}: Effectiveness reduced for colorblind users without additional encoding
+\item \textbf{Browser Requirements}: Requires modern web browser for optimal interactive experience
+\end{itemize}
+
+\section{Implementation Details}
+
+\subsection{Data Transformation Pipeline}
+\begin{align}
+\text{Input} &: \{(L1_i, L2_i) : i \in \text{all annotations}\} \\
+\text{Aggregation} &: \text{GroupBy}(L1, L2) \rightarrow \text{Counts} \\
+\text{Path Structure} &: [\text{'L1\_Category', 'L2\_Category'}] \\
+\text{Output} &: \text{Sunburst DataFrame}(L1, L2, \text{counts})
+\end{align}
+
+\subsection{Visualization Parameters}
+\begin{itemize}
+\item \textbf{Color Scheme}: px.colors.qualitative.Vivid for maximum category distinction
+\item \textbf{Layout}: Centered title, 50px top margin, 25px side margins for professional appearance
+\item \textbf{Font Sizing}: 14px base, 24px title for optimal readability
+\item \textbf{Interaction}: Custom hover template showing label, value, and parent context
+\end{itemize}
+
+\subsection{Performance Considerations}
+\begin{itemize}
+\item \textbf{Data Size}: Optimized for datasets with 10-50 L1 categories and 100-500 L2 subcategories
+\item \textbf{Rendering Speed}: Client-side Plotly rendering suitable for real-time exploration
+\item \textbf{Memory Usage}: Minimal overhead due to aggregated data structure
+\item \textbf{Browser Compatibility}: HTML5 canvas rendering ensures broad compatibility
+\end{itemize}
+
+\section{Success Metrics}
+
+\subsection{User Adoption Indicators}
+\begin{itemize}
+\item Support managers use visualization for weekly team planning sessions
+\item Executive stakeholders reference chart in strategic planning meetings
+\item Training coordinators identify skill gaps within 15 minutes of analysis
+\item Resource allocation decisions incorporate insights from hierarchical patterns
+\end{itemize}
+
+\subsection{Business Impact Measures}
+\begin{itemize}
+\item Reduced time-to-insight from hours to minutes for category analysis
+\item Improved stakeholder comprehension of support complexity
+\item Enhanced data-driven decision making in team structure optimization
+\item Increased engagement with analytics through intuitive visualization format
+\end{itemize}
+
+\section{Future Evolution}
+
+\subsection{Enhancement Roadmap}
+\begin{itemize}
+\item \textbf{Temporal Animation}: Time-series capability showing category evolution over periods
+\item \textbf{Drill-down Integration}: Link to detailed analysis dashboards for specific categories
+\item \textbf{Comparison Mode}: Side-by-side sunbursts for annotator or time period comparison
+\item \textbf{Export Capabilities}: High-resolution static exports for presentations and reports
+\end{itemize}
+
+\subsection{Integration Opportunities}
+\begin{itemize}
+\item Real-time data feeds for continuous landscape monitoring
+\item Mobile-responsive design for executive dashboard applications
+\item Embedding capabilities in existing business intelligence platforms
+\item API development for programmatic access to hierarchical insights
+\end{itemize}
+
+\subsection{Validation Framework}
+Ongoing effectiveness assessment through:
+\begin{itemize}
+\item User feedback surveys on comprehension and utility
+\item Decision quality correlation with visualization usage patterns
+\item Comparative analysis against traditional reporting methods
+\item Business outcome tracking for visualization-influenced decisions
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,158 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\title{\textbf{ADR-02: Data Generation Strategy for Customer Query Analytics}}
+\author{Architecture Decision Record}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Status}
+\textbf{Accepted}
+
+\section{Context}
+
+Customer query analytics requires high-quality annotated datasets to develop reliable classification systems and assess inter-annotator agreement. The project faces constraints around data availability, privacy regulations, and the need for controlled experimentation.
+
+\subsection{Data Requirements}
+\begin{itemize}
+\item Realistic customer support ticket content across multiple difficulty levels
+\item Multiple annotator perspectives to assess inter-annotator agreement
+\item Hierarchical labels (L1: Technical/Billing/Account, L2: Specific subtypes)
+\item Sufficient volume for statistical analysis and pattern detection
+\item Diverse scenarios representing real-world annotation challenges
+\end{itemize}
+
+\subsection{Alternative Approaches Considered}
+\begin{enumerate}
+\item \textbf{Real Customer Data}: Use actual support tickets with anonymization
+\item \textbf{Public Datasets}: Leverage existing customer service datasets
+\item \textbf{Crowdsourced Annotation}: Hire external annotators for real data labeling
+\item \textbf{Synthetic Data Generation}: AI-generated tickets with simulated annotator responses
+\item \textbf{Hybrid Approach}: Combination of real data samples with synthetic augmentation
+\end{enumerate}
+
+\section{Decision}
+
+We selected \textbf{LLM Based Synthetic Data Generation with Multi-Annotator Simulation} using the following architecture:
+
+\subsection{Core Strategy}
+\begin{itemize}
+\item Generate 50 hyper-realistic customer support tickets across three difficulty tiers
+\item Simulate 7 distinct annotator personas with varying skill levels and biases
+\item Implement controlled policy ambiguities to create realistic disagreement patterns
+\item Use tiered complexity (Easy: 15, Medium: 15, Hard: 20 samples) for comprehensive analysis
+\end{itemize}
+
+\subsection{Annotator Simulation Framework}
+\begin{itemize}
+\item \textbf{Tier 1 - Expert Annotators}: alex-001, beth-002, carlos-003 (high accuracy)
+\item \textbf{Tier 2 - Medium Annotators}: diane-004, eric-005 (policy-confused but well-intentioned)  
+\item \textbf{Tier 3 - Poor Annotators}: fatima-006, george-007 (low-effort, keyword-based)
+\end{itemize}
+
+\subsection{Complexity Stratification}
+\begin{itemize}
+\item \textbf{Easy Tickets (15)}: Clear, unambiguous requests with high expected agreement
+\item \textbf{Medium Tickets (15)}: Policy ambiguities testing L1/L2 boundary decisions
+\item \textbf{Hard Tickets (20)}: Stream-of-consciousness, emotionally charged, multi-issue scenarios
+\end{itemize}
+
+\section{Rationale}
+
+\subsection{Advantages of Synthetic Approach}
+\begin{itemize}
+\item \textbf{Privacy Compliance}: Zero risk of customer data exposure or regulatory violations
+\item \textbf{Controlled Experimentation}: Precisely engineered scenarios to test specific analytical capabilities
+\item \textbf{Annotator Bias Simulation}: Realistic human annotation patterns without human resource costs
+\item \textbf{Rapid Iteration}: Ability to generate additional samples or modify scenarios as needed
+\item \textbf{Ground Truth Control}: Known complexity levels enable validation of analytical methods
+\end{itemize}
+
+\subsection{Technical Implementation Benefits}
+\begin{itemize}
+\item \textbf{Consistent Quality}: Every ticket engineered to serve specific analytical purposes
+\item \textbf{Realistic Disagreement}: Annotator personas create authentic inter-annotator agreement patterns
+\item \textbf{Scalable Generation}: Framework can produce additional datasets for future analysis
+\item \textbf{Policy Testing}: Deliberate ambiguities validate annotation policy effectiveness
+\end{itemize}
+
+\section{Consequences}
+
+\subsection{Positive Outcomes}
+\begin{itemize}
+\item \textbf{Risk Mitigation}: Eliminated data privacy and compliance concerns
+\item \textbf{Analytical Validity}: Controlled dataset enables rigorous testing of IAA methods
+\item \textbf{Cost Efficiency}: No annotation labor costs or real data acquisition expenses
+\item \textbf{Reproducibility}: Consistent dataset enables reliable algorithm comparison and validation
+\item \textbf{Educational Value}: Clear demonstration of annotation challenges and solution approaches
+\end{itemize}
+
+\subsection{Trade-offs and Limitations}
+\begin{itemize}
+\item \textbf{Synthetic Bias}: Generated content may miss nuances of real customer language
+\item \textbf{Limited Vocabulary}: Constrained to AI-generated linguistic patterns
+\item \textbf{Scale Constraints}: 50 samples sufficient for proof-of-concept but limited for production training
+\item \textbf{Domain Gaps}: May not capture industry-specific terminology or edge cases
+\end{itemize}
+
+\subsection{Rejected Alternatives}
+\begin{itemize}
+\item \textbf{Real Customer Data}: Legal and privacy risks outweighed analytical benefits
+\item \textbf{Public Datasets}: Available datasets lacked hierarchical structure and multi-annotator perspective
+\item \textbf{Crowdsourced Annotation}: High cost and quality control challenges
+\item \textbf{Hybrid Approach}: Complexity overhead without sufficient additional benefit
+\end{itemize}
+
+\section{Implementation Details}
+
+\subsection{Data Generation Parameters}
+\begin{itemize}
+\item \textbf{Ticket Length}: 2-3 sentences (easy), 3-5 sentences (medium), 4-7 sentences (hard)
+\item \textbf{Emotional Range}: Neutral/polite (easy) to highly emotional/frustrated (hard)
+\item \textbf{Ambiguity Injection}: Systematic testing of Login vs. Password Reset boundary cases
+\item \textbf{Realism Features}: Typos, grammar errors, stream-of-consciousness patterns in hard tier
+\end{itemize}
+
+\subsection{Quality Validation}
+\begin{itemize}
+\item Manual review of generated samples for realism and diversity
+\item Verification that annotator personas produce expected disagreement patterns
+\item Confirmation that difficulty tiers create appropriate analytical challenges
+\item Cross-validation with subject matter experts on ticket authenticity
+\end{itemize}
+
+\subsection{Success Metrics}
+\begin{itemize}
+\item Inter-annotator agreement ranges: Easy ($\alpha > 0.8$), Medium ($0.4 < \alpha < 0.8$), Hard ($\alpha < 0.6$)
+\item Annotator performance differentiation clearly visible in confusion matrices
+\item Sufficient linguistic diversity for meaningful topic modeling and entity recognition
+\item Realistic sentiment distribution across emotional spectrum
+\end{itemize}
+
+\section{Future Considerations}
+
+\subsection{Evolution Path}
+\begin{itemize}
+\item \textbf{Scale Expansion}: Generate larger datasets (500+ samples) for production model training
+\item \textbf{Real Data Integration}: Incorporate anonymized real samples for validation
+\item \textbf{Domain Extension}: Adapt generation framework for other business contexts
+\item \textbf{Dynamic Generation}: Real-time synthetic data creation for continuous testing
+\end{itemize}
+
+\subsection{Validation Requirements}
+Quarterly assessment of synthetic data quality through:
+\begin{itemize}
+\item Comparison with emerging real customer ticket patterns
+\item Validation against production model performance
+\item Expert review of linguistic authenticity and business relevance
+\item Extension testing to additional customer service scenarios
+\end{itemize}
+
+\end{document}

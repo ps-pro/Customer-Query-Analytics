@@ -1,0 +1,171 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\title{\textbf{ADR-03: Label Distribution Analysis Strategy}}
+\author{Architecture Decision Record}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Status}
+\textbf{Accepted}
+
+\section{Context}
+
+Understanding the distribution of annotation labels is crucial for assessing dataset balance, identifying annotation biases, and validating the effectiveness of the hierarchical classification scheme. The analysis needs to provide actionable insights for support team routing decisions and annotator training priorities.
+
+\subsection{Business Requirements}
+\begin{itemize}
+\item Understand ticket volume distribution across primary categories (Technical/Billing/Account Management)
+\item Identify most common specific issues within each category for resource allocation
+\item Detect annotation imbalances that could affect automated classification training
+\item Provide management visibility into customer request patterns for strategic planning
+\end{itemize}
+
+\subsection{Technical Challenges}
+\begin{itemize}
+\item Multi-annotator perspective requires aggregation across 7 different viewpoints
+\item Hierarchical structure (L1/L2) needs separate analysis approaches
+\item Visualization must be interpretable by non-technical stakeholders
+\item Statistical significance varies with label frequency
+\end{itemize}
+
+\section{Decision}
+
+We implemented a \textbf{Dual-Level Distribution Analysis} using frequency counting and professional visualization:
+
+\subsection{Core Approach}
+\begin{itemize}
+\item Extract all L1 (parent) and L2 (child) labels from 7 annotator columns
+\item Aggregate annotations across all annotators to understand consensus patterns
+\item Generate separate distribution analyses for L1 categories and L2 subcategories
+\item Create professional bar plots with percentage annotations for stakeholder communication
+\end{itemize}
+
+\subsection{Implementation Strategy}
+\begin{itemize}
+\item \textbf{Data Processing}: Extract hierarchical label pairs from A\_1 through A\_7 columns
+\item \textbf{L1 Analysis}: Count frequency of Technical Issue, Billing, Account Management categories
+\item \textbf{L2 Analysis}: Display top 15 most common specific subcategories for clarity
+\item \textbf{Visualization}: Horizontal bar charts with seaborn styling for professional presentation
+\end{itemize}
+
+\subsection{Analysis Tools Selected}
+\begin{itemize}
+\item \textbf{Counter class}: Efficient frequency counting for categorical data
+\item \textbf{Seaborn barplot}: Professional styling with viridis/plasma color palettes
+\item \textbf{Percentage annotations}: Direct business value communication
+\item \textbf{Volume-based sorting}: Priority order for management decision-making
+\end{itemize}
+
+\section{Rationale}
+
+\subsection{Why Frequency-Based Analysis}
+\begin{itemize}
+\item \textbf{Resource Allocation}: Directly informs staffing decisions for support teams
+\item \textbf{Training Priorities}: Highlights categories requiring most annotator attention
+\item \textbf{System Performance}: Identifies high-volume categories for automation prioritization
+\item \textbf{Customer Insights}: Reveals most common customer pain points for product teams
+\end{itemize}
+
+\subsection{Why Dual-Level Visualization}
+\begin{itemize}
+\item \textbf{Strategic View}: L1 distribution guides team structure and capacity planning
+\item \textbf{Operational View}: L2 distribution guides specific workflow and process improvements
+\item \textbf{Stakeholder Communication}: Different audiences need different levels of detail
+\item \textbf{Validation Tool}: Confirms hierarchical structure aligns with business reality
+\end{itemize}
+
+\subsection{Alternative Approaches Considered}
+\begin{itemize}
+\item \textbf{Single Annotator Analysis}: Rejected due to bias and limited perspective
+\item \textbf{Statistical Distribution Testing}: Deemed over-engineering for stakeholder needs
+\item \textbf{Time-Series Analysis}: Data insufficient for temporal pattern detection
+\item \textbf{Interactive Dashboards}: Excessive complexity for static insight needs
+\end{itemize}
+
+\section{Consequences}
+
+\subsection{Positive Outcomes}
+\begin{itemize}
+\item \textbf{Immediate Actionability}: Clear guidance for support team resource allocation
+\item \textbf{Annotation Quality Insights}: Reveals if annotators are aligned on primary categories
+\item \textbf{Dataset Balance Assessment}: Identifies potential training data imbalances early
+\item \textbf{Stakeholder Engagement}: Professional visualizations enable effective management communication
+\item \textbf{Strategic Intelligence}: Data-driven foundation for business process improvements
+\end{itemize}
+
+\subsection{Implementation Benefits}
+\begin{itemize}
+\item \textbf{Computational Efficiency}: Simple frequency counting scales to larger datasets
+\item \textbf{Reproducibility}: Straightforward methodology easily replicable for ongoing analysis
+\item \textbf{Extensibility}: Framework adaptable to additional annotation dimensions
+\item \textbf{Maintenance Simplicity}: Minimal dependencies and clear analysis pipeline
+\end{itemize}
+
+\subsection{Limitations and Trade-offs}
+\begin{itemize}
+\item \textbf{Static Analysis}: No temporal trends or annotator-specific patterns visible
+\item \textbf{Aggregation Loss}: Individual annotator disagreements masked in combined view
+\item \textbf{Context Missing}: Raw frequencies don't reflect annotation difficulty or uncertainty
+\item \textbf{Limited Depth}: No cross-category relationships or dependency analysis
+\end{itemize}
+
+\section{Implementation Details}
+
+\subsection{Data Extraction Logic}
+\begin{align}
+L1\_labels &= \{label[0] : label \in \bigcup_{i=1}^{7} A_i, |label| \geq 2\} \\
+L2\_labels &= \{label[1] : label \in \bigcup_{i=1}^{7} A_i, |label| \geq 2\}
+\end{align}
+
+\subsection{Visualization Parameters}
+\begin{itemize}
+\item \textbf{L1 Plot}: All categories displayed with percentage annotations
+\item \textbf{L2 Plot}: Top 15 subcategories to maintain chart readability
+\item \textbf{Color Schemes}: Viridis (L1) and Plasma (L2) for professional appearance
+\item \textbf{Figure Size}: 12×7 (L1) and 12×9 (L2) for optimal readability
+\end{itemize}
+
+\subsection{Success Metrics}
+\begin{itemize}
+\item Clear identification of dominant support categories within 5 minutes of analysis
+\item Management stakeholders can make resource allocation decisions from visualizations
+\item Dataset balance assessment completed for machine learning pipeline planning
+\item Annotation training priorities established based on volume distribution
+\end{itemize}
+
+\section{Future Considerations}
+
+\subsection{Enhancement Opportunities}
+\begin{itemize}
+\item \textbf{Temporal Analysis}: Track distribution changes over time with expanded datasets
+\item \textbf{Annotator Comparison}: Individual annotator distribution analysis for training assessment
+\item \textbf{Cross-Category Analysis}: Explore relationships between L1 and L2 category assignments
+\item \textbf{Interactive Exploration}: Enable drill-down capabilities for detailed investigation
+\end{itemize}
+
+\subsection{Integration Requirements}
+\begin{itemize}
+\item Dashboard integration for real-time monitoring with production data
+\item Automated alerting when distributions deviate significantly from baselines
+\item Export capabilities for strategic planning presentations and reports
+\item API endpoints for programmatic access to distribution statistics
+\end{itemize}
+
+\subsection{Validation Framework}
+Regular validation through:
+\begin{itemize}
+\item Comparison with actual support ticket routing patterns
+\item Stakeholder feedback on visualization effectiveness and clarity
+\item Performance impact assessment on subsequent machine learning models
+\item Business outcome correlation with resource allocation decisions
+\end{itemize}
+
+\end{document}
