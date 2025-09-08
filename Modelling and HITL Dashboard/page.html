@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+        <style>
+            /* Light Theme */
+            .theme-light {
+                --bg-primary: #ffffff;
+                --bg-secondary: #f8f9fa;
+                --text-primary: #212529;
+                --text-secondary: #6c757d;
+                --border-color: #dee2e6;
+                --card-bg: #ffffff;
+                --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+                --purple-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                --purple-gradient-hover: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+                --purple-shadow: rgba(102, 126, 234, 0.4);
+            }
+            
+            /* Dark Theme */
+            .theme-dark {
+                --bg-primary: #1a1a1a;
+                --bg-secondary: #2d2d2d;
+                --text-primary: #ffffff;
+                --text-secondary: #cbd5e0;
+                --border-color: #4a5568;
+                --card-bg: #2d2d2d;
+                --shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+                --purple-gradient: linear-gradient(135deg, #805ad5 0%, #9f7aea 100%);
+                --purple-gradient-hover: linear-gradient(135deg, #6b46c1 0%, #8b5cf6 100%);
+                --purple-shadow: rgba(139, 92, 246, 0.4);
+            }
+            
+            /* Apply theme variables */
+            body {
+                background-color: var(--bg-primary) !important;
+                color: var(--text-primary) !important;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+                transition: all 0.3s ease;
+            }
+            
+            #main-container {
+                background-color: var(--bg-primary);
+                color: var(--text-primary);
+            }
+            
+            #main-title {
+                color: var(--text-primary) !important;
+                font-size: 2.5rem !important;
+            }
+            
+            #main-subtitle {
+                color: var(--text-secondary) !important;
+            }
+            
+            /* Purple Gradient Buttons */
+            .btn-primary, .btn.btn-primary {
+                background: var(--purple-gradient) !important;
+                border: none !important;
+                color: white !important;
+                font-weight: 600 !important;
+                border-radius: 12px !important;
+                padding: 12px 24px !important;
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2) !important;
+                transition: all 0.3s ease !important;
+                transform: translateY(0) !important;
+            }
+
+            .btn-primary:hover, .btn.btn-primary:hover {
+                background: var(--purple-gradient-hover) !important;
+                transform: translateY(-3px) !important;
+                box-shadow: 0 8px 25px var(--purple-shadow) !important;
+                color: white !important;
+            }
+
+            .btn-primary:active, .btn.btn-primary:active {
+                transform: translateY(-1px) !important;
+                box-shadow: 0 4px 15px var(--purple-shadow) !important;
+            }
+
+            .btn-success {
+                background: linear-gradient(135deg, #48bb78 0%, #38a169 100%) !important;
+                border: none !important;
+                color: white !important;
+                border-radius: 12px !important;
+                transition: all 0.3s ease !important;
+            }
+
+            .btn-success:hover {
+                transform: translateY(-2px) !important;
+                box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4) !important;
+            }
+            
+            /* Card styling */
+            .card {
+                background-color: var(--card-bg) !important;
+                border: 1px solid var(--border-color) !important;
+                box-shadow: var(--shadow) !important;
+                border-radius: 15px !important;
+                transition: all 0.3s ease !important;
+            }
+
+            .card:hover {
+                box-shadow: 0 12px 30px rgba(102, 126, 234, 0.15) !important;
+                transform: translateY(-2px) !important;
+            }
+            
+            .card-header {
+                background: var(--purple-gradient) !important;
+                border-bottom: none !important;
+                color: white !important;
+                font-weight: 600 !important;
+                border-radius: 15px 15px 0 0 !important;
+            }
+            
+            .card-body {
+                color: var(--text-primary) !important;
+                padding: 2rem !important;
+            }
+
+            /* Enhanced form controls */
+            .Select-control, .dropdown {
+                border-radius: 12px !important;
+                border: 2px solid rgba(102, 126, 234, 0.2) !important;
+                box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1) !important;
+                transition: all 0.3s ease !important;
+                background-color: var(--card-bg) !important;
+                color: var(--text-primary) !important;
+            }
+
+            .Select-control:hover, .dropdown:hover {
+                border-color: rgba(102, 126, 234, 0.4) !important;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2) !important;
+            }
+
+            /* Input styling */
+            .form-control, .form-select, input, textarea {
+                background-color: var(--card-bg) !important;
+                border: 2px solid var(--border-color) !important;
+                color: var(--text-primary) !important;
+                border-radius: 12px !important;
+                padding: 12px 16px !important;
+                transition: all 0.3s ease !important;
+            }
+            
+            .form-control:focus, .form-select:focus, input:focus, textarea:focus {
+                background-color: var(--card-bg) !important;
+                border-color: #667eea !important;
+                color: var(--text-primary) !important;
+                box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+            }
+
+            /* Text and label colors */
+            label, .form-label, p, h1, h2, h3, h4, h5, h6, span, div {
+                color: var(--text-primary) !important;
+            }
+
+            .text-muted, .text-secondary {
+                color: var(--text-secondary) !important;
+            }
+
+            /* Tab styling */
+            .nav-tabs {
+                border-bottom: 2px solid var(--border-color) !important;
+                background: transparent !important;
+            }
+
+            .nav-tabs .nav-link {
+                color: var(--text-secondary) !important;
+                border: none !important;
+                background: transparent !important;
+                font-weight: 600 !important;
+                font-size: 1.1rem !important;
+                padding: 1rem 2rem !important;
+                border-radius: 12px 12px 0 0 !important;
+                transition: all 0.3s ease !important;
+            }
+
+            .nav-tabs .nav-link:hover {
+                background: var(--bg-secondary) !important;
+                color: var(--text-primary) !important;
+                transform: translateY(-2px) !important;
+            }
+
+            .nav-tabs .nav-link.active {
+                background: var(--purple-gradient) !important;
+                color: white !important;
+                border: none !important;
+                font-weight: 700 !important;
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+            }
+
+            /* Slider styling */
+            .rc-slider-track {
+                background: var(--purple-gradient) !important;
+                height: 8px !important;
+            }
+
+            .rc-slider-handle {
+                border: 3px solid #667eea !important;
+                background: white !important;
+                width: 24px !important;
+                height: 24px !important;
+                margin-top: -8px !important;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+            }
+
+            .rc-slider-rail {
+                background: var(--border-color) !important;
+                height: 8px !important;
+            }
+
+
+            /* Custom radio button styling with big red dot */
+            input[type="radio"] {
+                appearance: none !important;
+                -webkit-appearance: none !important;
+                width: 20px !important;
+                height: 20px !important;
+                border: 2px solid var(--border-color) !important;
+                border-radius: 50% !important;
+                background-color: var(--card-bg) !important;
+                position: relative !important;
+                cursor: pointer !important;
+                outline: none !important;
+            }
+
+            input[type="radio"]:checked {
+                border-color: #ff0000 !important;
+            }
+
+            input[type="radio"]:checked::before {
+                content: '' !important;
+                position: absolute !important;
+                top: 50% !important;
+                left: 50% !important;
+                width: 12px !important;
+                height: 12px !important;
+                border-radius: 50% !important;
+                background-color: #ff0000 !important;
+                transform: translate(-50%, -50%) !important;
+            }
+
+            /* Keep checkbox styling separate */
+            input[type="checkbox"] {
+                accent-color: #667eea !important;
+                width: 18px !important;
+                height: 18px !important;
+            }
+
+            /* Plot containers - BIGGER SIZES */
+            .js-plotly-plot {
+                border-radius: 15px !important;
+                box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15) !important;
+                background: #ffffff !important;
+                min-height: 600px !important;
+            }
+
+            /* MATRIX PLOTS - EXTRA LARGE */
+            .js-plotly-plot[data-title*="Matrix"],
+            .js-plotly-plot[data-title*="Confusion"] {
+                min-height: 800px !important;
+            }
+            
+            /* Table styling */
+            .dash-table-container {
+                background-color: var(--card-bg) !important;
+                border-radius: 15px !important;
+                overflow: hidden !important;
+                border: 1px solid var(--border-color) !important;
+            }
+
+            .dash-table-container .dash-spreadsheet-container {
+                background-color: var(--card-bg) !important;
+            }
+
+            .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner {
+                background-color: var(--card-bg) !important;
+            }
+
+            .dash-table-container th {
+                background: var(--purple-gradient) !important;
+                color: white !important;
+                font-weight: 600 !important;
+            }
+
+            .dash-table-container td {
+                background-color: var(--card-bg) !important;
+                color: var(--text-primary) !important;
+                border-color: var(--border-color) !important;
+            }
+            /* Hide only the page number input field, keep other pagination controls */
+            .dash-table-container .previous-next-container input.current-page {
+                display: none !important;
+            }
+
+            /* Style the delete cross - bigger and red */
+            .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner table .dash-cell.dash-cell--focused .delete-cell,
+            .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner table .delete-cell {
+                color: #dc3545 !important;
+                font-size: 20px !important;
+                font-weight: bold !important;
+                cursor: pointer !important;
+            }
+
+            .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner table .delete-cell:hover {
+                color: #c82333 !important;
+                background-color: rgba(220, 53, 69, 0.1) !important;
+            }
+         
+            
+            /* Progress bar */
+            .progress {
+                background-color: var(--bg-secondary) !important;
+                border-radius: 12px !important;
+                height: 8px !important;
+            }
+
+            .progress-bar {
+                background: var(--purple-gradient) !important;
+                border-radius: 12px !important;
+            }
+
+            /* Alert styling */
+            .alert {
+                border-radius: 12px !important;
+                border: none !important;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+            }
+
+            .alert-info {
+                background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%) !important;
+                color: white !important;
+            }
+
+            .alert-danger {
+                background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%) !important;
+                color: white !important;
+            }
+
+            .alert-warning {
+                background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%) !important;
+                color: white !important;
+            }
+
+            .alert-success {
+                background: linear-gradient(135deg, #48bb78 0%, #38a169 100%) !important;
+                color: white !important;
+            }
+
+            /* Theme toggle buttons */
+            .btn-outline-secondary {
+                color: var(--text-secondary) !important;
+                border: 2px solid var(--border-color) !important;
+                background: transparent !important;
+                border-radius: 8px !important;
+                transition: all 0.3s ease !important;
+            }
+            
+            .btn-outline-secondary:hover, .btn-outline-secondary.active {
+                background: var(--purple-gradient) !important;
+                color: white !important;
+                border-color: transparent !important;
+                transform: translateY(-1px) !important;
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .js-plotly-plot {
+                    min-height: 400px !important;
+                }
+                
+                .js-plotly-plot[data-title*="Matrix"],
+                .js-plotly-plot[data-title*="Confusion"] {
+                    min-height: 500px !important;
+                }
+            }
+        </style>
+    </head>
+    <body class="theme-light">
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>
