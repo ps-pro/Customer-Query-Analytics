@@ -1,0 +1,554 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+
+% Color definitions
+\definecolor{primaryblue}{RGB}{102,126,234}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkgray}{RGB}{85,85,85}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{primaryblue}{\textbf{HITL Dashboard User Guide}}}
+\fancyhead[R]{\textcolor{darkgray}{\thepage}}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{primaryblue}\leaders\hrule height \headrulewidth\hfill}}
+
+% Custom boxes
+\newtcolorbox{infobox}[1]{
+    colback=lightgray,
+    colframe=primaryblue,
+    fonttitle=\bfseries,
+    title=#1
+}
+
+\newtcolorbox{warningbox}[1]{
+    colback=yellow!10,
+    colframe=orange,
+    fonttitle=\bfseries,
+    title=#1
+}
+
+\newtcolorbox{tipbox}[1]{
+    colback=green!5,
+    colframe=green!50!black,
+    fonttitle=\bfseries,
+    title=#1
+}
+
+\title{
+    \vspace{-1cm}
+    {\Huge\textbf{\textcolor{primaryblue}{Modelling \& HITL Dashboard}}}\\
+    {\Large\textcolor{darkgray}{Complete User Guide}}\\
+    \vspace{0.5cm}
+    {\normalsize\textit{Automated Classification \& Human-in-the-Loop Analysis}}
+}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\vspace{1cm}
+
+\begin{abstract}
+This user guide provides comprehensive instructions for using the Modelling and Human-in-the-Loop (HITL) Dashboard. The dashboard compares automated classification methods (Rule-based and Fuzzy Matching) against human annotations, identifies systematic errors, and provides tools for improving classifier performance through human feedback. This guide explains each component, configuration option, and how to derive actionable business insights.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Dashboard Overview}
+
+\subsection{Purpose}
+The Modelling \& HITL Dashboard serves as a comprehensive platform for:
+\begin{itemize}
+    \item \textbf{Performance Comparison}: Evaluating automated classifiers against human consensus
+    \item \textbf{Error Pattern Detection}: Identifying where and why automated systems fail
+    \item \textbf{Continuous Improvement}: Providing tools to refine classification rules and examples
+    \item \textbf{Business Intelligence}: Generating insights for operational optimization
+\end{itemize}
+
+\subsection{Dashboard Structure}
+The dashboard consists of three main tabs:
+\begin{enumerate}
+    \item \textcolor{primaryblue}{\textbf{Performance Overview}} - Classifier comparison and metrics
+    \item \textcolor{primaryblue}{\textbf{Error Analysis}} - Detailed mistake analysis and improvement suggestions
+    \item \textcolor{primaryblue}{\textbf{CRUD Management}} - Rule and example management interface
+\end{enumerate}
+
+\begin{infobox}{Important Note}
+Always start with the \textbf{Performance Overview} tab to generate analysis data before moving to other tabs. The dashboard stores results across sessions for consistent analysis.
+\end{infobox}
+
+\section{Performance Overview Tab}
+
+\subsection{What This Tab Does}
+The Performance Overview tab compares two automated classification approaches:
+\begin{itemize}
+    \item \textbf{Rule-based Classifier}: Uses boolean logic rules with keywords
+    \item \textbf{Fuzzy Matching Classifier}: Matches input text to example patterns
+\end{itemize}
+
+Both classifiers are evaluated against human consensus labels to determine which approach works best for your specific data.
+
+\subsection{Configuration Options}
+
+\subsubsection{Fuzzy Matching Configuration}
+\textbf{Location}: Blue card in the top-left section
+
+\textbf{Radio Button Options}:
+\begin{itemize}
+    \item \textbf{Character-Level Similarity} (Default)
+    \begin{itemize}
+        \item Uses string matching algorithms
+        \item Best for: Exact phrase matching, typo tolerance
+        \item Example: "refund request" matches "refund req" with high similarity
+    \end{itemize}
+    \item \textbf{Semantic Similarity (TF-IDF)}
+    \begin{itemize}
+        \item Uses meaning-based text analysis
+        \item Best for: Conceptually similar but differently worded requests
+        \item Example: "get my money back" matches "refund request" semantically
+    \end{itemize}
+\end{itemize}
+
+\begin{tipbox}{Recommendation}
+Start with \textbf{Character-Level} for initial analysis. Switch to \textbf{Semantic} if you see poor performance with abbreviated or varied language in your customer communications.
+\end{tipbox}
+
+\subsubsection{Analyze Performance Button}
+\textbf{Location}: Blue button in the top-right section
+
+\textbf{What it does}:
+\begin{itemize}
+    \item Runs both classifiers on all available customer support tickets
+    \item Compares predictions against human consensus labels
+    \item Calculates performance metrics (accuracy, precision, recall, F1-score)
+    \item Generates comparative visualizations
+    \item Stores results for use in other tabs
+\end{itemize}
+
+\subsection{Understanding the Results}
+
+After clicking "Analyze Performance", you'll see several visualization sections:
+
+\subsubsection{Performance Comparison Charts}
+\textbf{What you see}: Side-by-side bar charts showing accuracy metrics
+
+\textbf{How to interpret}:
+\begin{itemize}
+    \item \textbf{Accuracy}: Overall percentage of correct predictions
+        \begin{itemize}
+            \item 90\%+ = Excellent performance
+            \item 80-89\% = Good performance
+            \item 70-79\% = Acceptable performance
+            \item <70\% = Needs improvement
+        \end{itemize}
+    \item \textbf{F1-Score}: Balanced measure of precision and recall (0.0-1.0)
+        \begin{itemize}
+            \item 0.9+ = Excellent
+            \item 0.8-0.89 = Good
+            \item 0.7-0.79 = Acceptable
+            \item <0.7 = Needs improvement
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Confidence Distribution Analysis}
+\textbf{What you see}: Histogram showing how confident each classifier is in its predictions
+
+\textbf{How to interpret}:
+\begin{itemize}
+    \item \textbf{High confidence peak (0.8-1.0)}: Classifier is very sure about most decisions
+    \item \textbf{Low confidence peak (0.0-0.4)}: Classifier is unsure about many decisions
+    \item \textbf{Even distribution}: Mixed confidence levels - investigate further
+\end{itemize}
+
+\begin{warningbox}{Red Flag}
+If you see many predictions with low confidence (<0.5), this indicates the classifier needs more training data or rule refinement.
+\end{warningbox}
+
+\subsubsection{Summary Metrics Cards}
+\textbf{What you see}: Three cards showing key performance indicators
+
+\textbf{Business insights}:
+\begin{itemize}
+    \item \textbf{Higher accuracy classifier}: Consider for primary automated routing
+    \item \textbf{Average confidence}: Use as threshold for manual review
+        \begin{itemize}
+            \item Route high-confidence predictions (>0.8) automatically
+            \item Send medium-confidence (0.5-0.8) for human review
+            \item Flag low-confidence (<0.5) for immediate attention
+        \end{itemize}
+\end{itemize}
+
+\section{Error Analysis Tab}
+
+\subsection{What This Tab Does}
+The Error Analysis tab identifies systematic mistakes made by automated classifiers and provides specific recommendations for improvement.
+
+\subsection{Prerequisites}
+\begin{infobox}{Required Action}
+You must run the analysis in the Performance Overview tab first. If you see "No Analysis Data Available", return to the Performance Overview tab and click "Analyze Performance".
+\end{infobox}
+
+\subsection{Understanding Error Patterns}
+
+\subsubsection{Disagreement Analysis Tables}
+\textbf{What you see}: Tables showing where classifiers made incorrect predictions
+
+\textbf{Table columns explained}:
+\begin{itemize}
+    \item \textbf{Document ID}: Unique identifier for the customer ticket
+    \item \textbf{Text}: The actual customer message (truncated for display)
+    \item \textbf{True Label}: What human annotators determined as correct
+    \item \textbf{Predicted Label}: What the automated classifier predicted
+    \item \textbf{Confidence}: How sure the classifier was (0.0-1.0)
+    \item \textbf{Human Confidence}: How much human annotators agreed
+\end{itemize}
+
+\subsubsection{Common Error Pattern Analysis}
+\textbf{What you see}: Charts showing which label pairs are most commonly confused
+
+\textbf{How to interpret}:
+\begin{itemize}
+    \item \textbf{High confusion between similar categories}: Normal, indicates need for more specific rules
+    \item \textbf{Unexpected confusions}: May indicate data quality issues or missing training examples
+    \item \textbf{One-way confusions}: One category consistently misclassified as another
+\end{itemize}
+
+\subsection{Improvement Suggestions}
+
+The dashboard automatically generates specific improvement recommendations:
+
+\subsubsection{Rule-Based Classifier Improvements}
+\textbf{Typical suggestions}:
+\begin{itemize}
+    \item \textbf{Add keywords}: Include missing terms found in misclassified tickets
+    \item \textbf{Refine boolean logic}: Improve AND/OR/NOT combinations
+    \item \textbf{Adjust weights}: Change priority of different rules
+    \item \textbf{Create negative rules}: Explicitly exclude certain patterns
+\end{itemize}
+
+\subsubsection{Fuzzy Matching Improvements}
+\textbf{Typical suggestions}:
+\begin{itemize}
+    \item \textbf{Add training examples}: Include more varied examples for confused categories
+    \item \textbf{Remove outlier examples}: Delete examples that don't represent the category well
+    \item \textbf{Balance example counts}: Ensure each category has sufficient examples
+    \item \textbf{Switch similarity method}: Try semantic vs. character-level matching
+\end{itemize}
+
+\begin{tipbox}{Action Priority}
+Focus on the most frequent error patterns first. A single improvement that fixes 10 common mistakes is more valuable than fixing 10 rare edge cases.
+\end{tipbox}
+
+\section{CRUD Management Tab}
+
+The CRUD (Create, Read, Update, Delete) Management tab provides hands-on tools for improving your classifiers based on error analysis insights.
+
+\subsection{Tab Structure}
+This tab contains three sub-tabs:
+\begin{enumerate}
+    \item \textbf{Rule-Based Classifier Rules}
+    \item \textbf{Fuzzy Matching Examples}
+    \item \textbf{Test Environment}
+\end{enumerate}
+
+\subsection{Rule-Based Classifier Rules Sub-Tab}
+
+\subsubsection{What This Section Does}
+Allows you to view, edit, and create boolean logic rules that determine how text gets classified.
+
+\subsubsection{Current Rules Table}
+\textbf{Editable columns}:
+\begin{itemize}
+    \item \textbf{Label}: The classification category (e.g., "Technical Issue\_Bug Report")
+    \item \textbf{Rule Expression}: Boolean logic with keywords
+        \begin{itemize}
+            \item Use \texttt{AND}, \texttt{OR}, \texttt{NOT} operators
+            \item Example: \texttt{(bug OR error) AND NOT login}
+        \end{itemize}
+    \item \textbf{Weight}: Priority score (0.1-2.0, default 1.0)
+        \begin{itemize}
+            \item Higher weights = higher priority when multiple rules match
+        \end{itemize}
+    \item \textbf{Description}: Human-readable explanation of the rule
+\end{itemize}
+
+\textbf{How to edit}:
+\begin{enumerate}
+    \item Click on any cell in the table
+    \item Make your changes
+    \item Click "Update All Rules" button to save changes
+\end{enumerate}
+
+\subsubsection{Add New Rule Section}
+\textbf{Form fields}:
+\begin{itemize}
+    \item \textbf{Label}: Choose from existing categories or create new ones
+    \item \textbf{Weight}: Set priority (1.0 is standard)
+    \item \textbf{Boolean Rule Expression}: Write your logic rule
+    \item \textbf{Description}: Document what this rule does
+\end{itemize}
+
+\textbf{Rule expression examples}:
+\begin{itemize}
+    \item Simple: \texttt{refund AND money}
+    \item Complex: \texttt{(slow OR loading OR timeout) AND NOT password}
+    \item Negative: \texttt{login AND NOT (password OR reset)}
+\end{itemize}
+
+\begin{warningbox}{Rule Writing Tips}
+\begin{itemize}
+    \item Use lowercase keywords only
+    \item Test rules in the Test Environment before deploying
+    \item Avoid overly complex expressions that are hard to maintain
+    \item Document the business logic behind each rule
+\end{itemize}
+\end{warningbox}
+
+\subsection{Fuzzy Matching Examples Sub-Tab}
+
+\subsubsection{What This Section Does}
+Manages the training examples that the fuzzy matching classifier uses to identify similar text patterns.
+
+\subsubsection{Current Examples Table}
+\textbf{Editable columns}:
+\begin{itemize}
+    \item \textbf{Label}: The classification category
+    \item \textbf{Example Text}: Representative text for this category
+\end{itemize}
+
+\textbf{Table operations}:
+\begin{itemize}
+    \item \textbf{Edit}: Click any cell to modify content
+    \item \textbf{Delete}: Use the red X button to remove examples
+    \item \textbf{Auto-save}: Changes are saved automatically
+\end{itemize}
+
+\subsubsection{Add New Example Section}
+\textbf{When to add examples}:
+\begin{itemize}
+    \item After error analysis reveals missing patterns
+    \item When expanding to new categories
+    \item To improve performance on edge cases
+\end{itemize}
+
+\textbf{Example quality guidelines}:
+\begin{itemize}
+    \item \textbf{Representative}: Should be typical of the category
+    \item \textbf{Clear}: Unambiguous examples work better
+    \item \textbf{Varied}: Include different ways customers express the same need
+    \item \textbf{Balanced}: Aim for 5-10 examples per category
+\end{itemize}
+
+\begin{tipbox}{Example Strategy}
+Include both formal ("I would like to request a refund") and informal ("can I get my money back?") variations to handle diverse customer communication styles.
+\end{tipbox}
+
+\subsection{Test Environment Sub-Tab}
+
+\subsubsection{What This Section Does}
+Provides a safe environment to test how your rules and examples perform on sample text before deploying changes.
+
+\subsubsection{Test Input Area}
+\textbf{Text input box}: Enter any customer support message to see how both classifiers would handle it.
+
+\textbf{Test button}: Triggers classification using current rules and examples.
+
+\subsubsection{Test Results Display}
+\textbf{Side-by-side comparison cards showing}:
+
+\textbf{Rule-based Classification Results}:
+\begin{itemize}
+    \item \textbf{Predicted Label}: The category assigned by rules
+    \item \textbf{Confidence}: How strong the rule match was
+    \item \textbf{Matched Keywords}: Which words triggered the rule
+    \item \textbf{Rule Fired}: The specific boolean expression that matched
+\end{itemize}
+
+\textbf{Fuzzy Matching Results}:
+\begin{itemize}
+    \item \textbf{Predicted Label}: The category assigned by example matching
+    \item \textbf{Confidence}: Similarity score to best example
+    \item \textbf{Best Match}: The training example most similar to input
+    \item \textbf{Method}: Whether character-level or semantic similarity was used
+\end{itemize}
+
+\subsubsection{Testing Strategy}
+\textbf{Recommended test cases}:
+\begin{enumerate}
+    \item \textbf{Previously misclassified tickets}: Verify fixes work
+    \item \textbf{Edge cases}: Test ambiguous or unusual requests
+    \item \textbf{New categories}: Ensure new rules/examples work correctly
+    \item \textbf{Variation testing}: Try different phrasings of the same request
+\end{enumerate}
+
+\section{Business Insights and Decision Making}
+
+\subsection{Performance Optimization Decisions}
+
+\subsubsection{Routing Strategy}
+Based on classifier performance, implement tiered routing:
+
+\begin{itemize}
+    \item \textbf{High confidence (>0.8)}: Automatic routing to specialist teams
+    \item \textbf{Medium confidence (0.5-0.8)}: Queue for quick human verification
+    \item \textbf{Low confidence (<0.5)}: Priority manual classification
+\end{itemize}
+
+\subsubsection{Resource Allocation}
+\textbf{If Rule-based performs better}:
+\begin{itemize}
+    \item Invest in business analyst time for rule refinement
+    \item Focus on keyword research and boolean logic training
+    \item Suitable for well-defined, structured processes
+\end{itemize}
+
+\textbf{If Fuzzy Matching performs better}:
+\begin{itemize}
+    \item Invest in diverse training example collection
+    \item Focus on customer communication pattern analysis
+    \item Better for dynamic, evolving language patterns
+\end{itemize}
+
+\subsection{Quality Monitoring}
+
+\subsubsection{Key Performance Indicators (KPIs)}
+\begin{itemize}
+    \item \textbf{Daily accuracy rate}: Track classification correctness
+    \item \textbf{Confidence distribution}: Monitor classifier certainty
+    \item \textbf{Manual review rate}: Percentage requiring human intervention
+    \item \textbf{Category confusion matrix}: Track which categories get mixed up
+\end{itemize}
+
+\subsubsection{Alert Thresholds}
+Set up monitoring for:
+\begin{itemize}
+    \item Accuracy drops below 80\%
+    \item >30\% of predictions have confidence <0.6
+    \item Sudden increase in specific error patterns
+    \item New categories appearing frequently in "Unknown" classifications
+\end{itemize}
+
+\subsection{Continuous Improvement Process}
+
+\subsubsection{Weekly Review Cycle}
+\begin{enumerate}
+    \item \textbf{Monday}: Review previous week's performance metrics
+    \item \textbf{Wednesday}: Analyze error patterns from Error Analysis tab
+    \item \textbf{Friday}: Update rules/examples based on insights
+    \item \textbf{Weekend}: Test changes in Test Environment
+\end{enumerate}
+
+\subsubsection{Monthly Optimization}
+\begin{enumerate}
+    \item Full performance comparison analysis
+    \item Stakeholder review of classification accuracy
+    \item Business impact assessment (time saved, routing efficiency)
+    \item Strategy adjustment based on seasonal patterns
+\end{enumerate}
+
+\section{Troubleshooting and Common Issues}
+
+\subsection{Performance Issues}
+
+\subsubsection{Low Overall Accuracy (<70\%)}
+\textbf{Potential causes}:
+\begin{itemize}
+    \item Insufficient training data
+    \item Poorly defined categories
+    \item Ambiguous business rules
+\end{itemize}
+
+\textbf{Solutions}:
+\begin{itemize}
+    \item Collect more representative examples
+    \item Refine category definitions with business stakeholders
+    \item Simplify overly complex classification schemes
+\end{itemize}
+
+\subsubsection{High Confusion Between Specific Categories}
+\textbf{Solutions}:
+\begin{itemize}
+    \item Add distinguishing keywords to rules
+    \item Include contrasting examples in fuzzy matching training
+    \item Consider merging overly similar categories
+\end{itemize}
+
+\subsection{Technical Issues}
+
+\subsubsection{Rules Not Updating}
+\textbf{Steps to resolve}:
+\begin{enumerate}
+    \item Ensure you clicked "Update All Rules" button
+    \item Check for syntax errors in boolean expressions
+    \item Verify all required fields are filled
+    \item Refresh the page and retry if issues persist
+\end{enumerate}
+
+\subsubsection{Examples Not Saving}
+\textbf{Steps to resolve}:
+\begin{enumerate}
+    \item Check that Label field is not empty
+    \item Ensure Example Text contains actual content
+    \item Try logging out and back in if auto-save fails
+\end{enumerate}
+
+\section{Best Practices and Recommendations}
+
+\subsection{Rule Development}
+\begin{itemize}
+    \item \textbf{Start simple}: Begin with basic keyword rules before adding complexity
+    \item \textbf{Test incrementally}: Add one rule at a time and test impact
+    \item \textbf{Document business logic}: Always explain why each rule exists
+    \item \textbf{Review regularly}: Rules become outdated as language evolves
+\end{itemize}
+
+\subsection{Example Management}
+\begin{itemize}
+    \item \textbf{Quality over quantity}: 5 excellent examples beat 20 mediocre ones
+    \item \textbf{Represent diversity}: Include formal, informal, and abbreviated styles
+    \item \textbf{Regular cleanup}: Remove examples that no longer represent categories well
+    \item \textbf{Balance datasets}: Ensure each category has adequate representation
+\end{itemize}
+
+\subsection{Change Management}
+\begin{itemize}
+    \item \textbf{Test before deployment}: Always use Test Environment first
+    \item \textbf{Track changes}: Document what changed and why
+    \item \textbf{Monitor impact}: Watch performance metrics after changes
+    \item \textbf{Have rollback plan}: Keep backup of working configurations
+\end{itemize}
+
+\section{Conclusion}
+
+The Modelling \& HITL Dashboard provides powerful tools for optimizing automated customer support classification. Success requires:
+
+\begin{enumerate}
+    \item \textbf{Regular monitoring}: Check performance metrics weekly
+    \item \textbf{Continuous improvement}: Act on error analysis insights
+    \item \textbf{Balanced approach}: Use both rule-based and fuzzy matching strengths
+    \item \textbf{Business alignment}: Ensure classifications serve operational needs
+\end{enumerate}
+
+By following this guide and maintaining an active improvement cycle, you can achieve high-quality automated classification that reduces manual workload while maintaining accuracy for customer satisfaction.
+
+\begin{tipbox}{Final Recommendation}
+Start with a pilot implementation on a subset of tickets, measure performance over 2-4 weeks, then gradually expand coverage based on confidence in the system's accuracy.
+\end{tipbox}
+
+\end{document}
