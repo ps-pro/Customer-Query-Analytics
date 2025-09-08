@@ -403,7 +403,7 @@ If you use this platform in academic research, please cite:
 @software{customer_query_analytics,
   title={Customer Query Analytics Platform: A Comprehensive System for Multi-Annotator Agreement Analysis and Human-in-the-Loop Classification},
   author={Priyansh Singhal},
-  year={2024},
+  year={2025},
   url={https://github.com/ps-pro/Customer-Query-Analytics},
   note={Advanced analytics platform with comprehensive business intelligence and architectural documentation}
 }
