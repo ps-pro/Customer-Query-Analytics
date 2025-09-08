@@ -1,0 +1,412 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{framed}
+
+\title{\textbf{Inter-Annotator Agreement Dashboard User Guide}}
+\author{PruTech Task C - Customer Query Analytics}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Dashboard Overview}
+
+The Inter-Annotator Agreement (IAA) Dashboard helps you understand how consistently different annotators label customer support tickets. This is crucial for ensuring your annotation quality and making data-driven decisions about annotator training and system performance.
+
+\subsection{What You'll Learn}
+\begin{itemize}
+\item How reliable your annotation process is
+\item Which annotators need additional training
+\item Whether certain types of labels are harder to classify consistently
+\item How label frequency affects agreement quality
+\end{itemize}
+
+\subsection{Dashboard Structure}
+The dashboard has three main analysis tabs:
+\begin{enumerate}
+\item \textbf{Overall Agreement Analysis} - General agreement statistics
+\item \textbf{Frequency-Based Analysis} - How label rarity affects agreement
+\item \textbf{Hierarchical Analysis} - Agreement across different label levels
+\end{enumerate}
+
+\section{Getting Started}
+
+\subsection{Basic Navigation}
+\begin{itemize}
+\item \textbf{Theme Toggle}: Use the Light/Dark buttons in the top-right corner to switch themes
+\item \textbf{Tab Selection}: Click on any tab name to switch between different analyses
+\item \textbf{Configuration Cards}: Each tab has a blue configuration section where you set your analysis parameters
+\item \textbf{Calculate Button}: Always click the relevant "Calculate" button to run your analysis
+\end{itemize}
+
+\subsection{Key Metrics to Understand}
+\begin{itemize}
+\item \textbf{Krippendorff's Alpha (α)}: Main reliability measure (-1 to 1, higher is better)
+\item \textbf{Percentage Agreement}: How often annotators exactly agree (0-100\%)
+\item \textbf{Confidence Intervals}: Range showing uncertainty in your results
+\end{itemize}
+
+\section{Tab 1: Overall Agreement Analysis}
+
+\subsection{Purpose}
+This tab gives you a comprehensive overview of how well your annotators agree overall. Use this to get a quick health check of your annotation quality.
+
+\subsection{Controls and Inputs}
+
+\subsubsection{Annotator Selection}
+\begin{itemize}
+\item \textbf{What it is}: Checkboxes to select which annotators to include in analysis
+\item \textbf{Default}: All annotators selected
+\item \textbf{When to change}: 
+\begin{itemize}
+\item Remove specific annotators to see if they're causing disagreement
+\item Compare subsets of annotators (e.g., experienced vs. new)
+\item Analyze individual annotator performance by selecting only one
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Label Type Dropdown}
+\begin{itemize}
+\item \textbf{Options}:
+\begin{itemize}
+\item \textbf{Full Hierarchical Labels}: Complete label (e.g., "Technical\_Performance\_Issue")
+\item \textbf{L1 (Parent) Labels}: Top-level categories (e.g., "Technical", "Billing")
+\item \textbf{L2 (Child) Labels}: Specific sub-types (e.g., "Performance\_Issue", "Refund\_Request")
+\end{itemize}
+\item \textbf{Recommendation}: Start with "Full Hierarchical Labels" for complete picture
+\end{itemize}
+
+\subsubsection{Confidence Level Slider}
+\begin{itemize}
+\item \textbf{Range}: 90\% to 99\%
+\item \textbf{Default}: 95\%
+\item \textbf{What it means}: How confident you want to be in your reliability estimates
+\item \textbf{When to adjust}: Use 99\% for critical decisions, 90\% for exploratory analysis
+\end{itemize}
+
+\subsection{Understanding the Results}
+
+\subsubsection{Summary Statistics Cards}
+\begin{itemize}
+\item \textbf{Krippendorff's Alpha}: Your main reliability score
+\begin{itemize}
+\item α ≥ 0.8: Excellent reliability ✓
+\item 0.67 ≤ α < 0.8: Good reliability (acceptable) ⚠
+\item 0.4 ≤ α < 0.67: Fair reliability (questionable) ⚠
+\item α < 0.4: Poor reliability (unacceptable) ✗
+\end{itemize}
+\item \textbf{Confidence Interval}: Range of likely true values
+\item \textbf{Bootstrap Samples}: Number of statistical simulations run (more = more reliable)
+\end{itemize}
+
+\subsubsection{Agreement Heatmap}
+\begin{itemize}
+\item \textbf{What it shows}: Agreement percentage between each pair of annotators
+\item \textbf{How to read}: 
+\begin{itemize}
+\item Diagonal is always 100\% (annotator agrees with themselves)
+\item Look for consistently low numbers in any row/column (problematic annotator)
+\item Dark red cells indicate high disagreement
+\end{itemize}
+\item \textbf{Business insight}: Identify which annotators need retraining
+\end{itemize}
+
+\subsubsection{Sample-Level Agreement Chart}
+\begin{itemize}
+\item \textbf{What it shows}: How many unique labels were assigned to each document
+\item \textbf{How to interpret}: 
+\begin{itemize}
+\item Peak at "1 unique label" = perfect agreement on many documents
+\item Spread to the right = more disagreement
+\end{itemize}
+\item \textbf{Business insight}: Identify if certain documents are consistently problematic
+\end{itemize}
+
+\subsubsection{Alpha Comparison Chart}
+\begin{itemize}
+\item \textbf{What it shows}: Agreement quality across different label types
+\item \textbf{How to interpret}: Usually L1 > L2 > Full (easier to agree on broad categories)
+\item \textbf{Business insight}: Understand which level of classification is most reliable
+\end{itemize}
+
+\section{Tab 2: Frequency-Based Analysis}
+
+\subsection{Purpose}
+This tab helps you understand whether rare or common labels are harder for annotators to classify consistently. This is crucial for training data balance and annotation difficulty assessment.
+
+\subsection{Controls and Inputs}
+
+\subsubsection{Label Type Dropdown}
+Same as Overall tab - choose which level of labels to analyze.
+
+\subsubsection{Rare Threshold Slider}
+\begin{itemize}
+\item \textbf{Range}: 500-1200 occurrences
+\item \textbf{Default}: 1000
+\item \textbf{What it means}: Labels appearing ≤ this number are considered "rare"
+\item \textbf{When to adjust}: 
+\begin{itemize}
+\item Increase if you want stricter definition of "rare"
+\item Decrease to include more labels in "rare" category
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Common Threshold Slider}
+\begin{itemize}
+\item \textbf{Range}: 1400-2000 occurrences
+\item \textbf{Default}: 1500
+\item \textbf{What it means}: Labels appearing ≥ this number are considered "common"
+\item \textbf{When to adjust}: Based on your dataset characteristics
+\end{itemize}
+
+\subsubsection{Annotator Selection}
+Same as Overall tab - choose which annotators to include.
+
+\subsection{Understanding the Results}
+
+\subsubsection{Frequency Analysis Summary Table}
+\begin{itemize}
+\item \textbf{Columns explained}:
+\begin{itemize}
+\item \textbf{Frequency Stratum}: Rare, Moderate, or Common labels
+\item \textbf{Alpha}: Agreement quality for this frequency group
+\item \textbf{Labels}: Number of unique label types in this group
+\item \textbf{Annotations}: Total annotation instances
+\item \textbf{Samples}: Number of documents containing these labels
+\end{itemize}
+\item \textbf{What to look for}: Usually common labels have higher agreement than rare ones
+\end{itemize}
+
+\subsubsection{Frequency-Agreement Correlation}
+\begin{itemize}
+\item \textbf{What it shows}: Relationship between how often a label appears and how consistently it's annotated
+\item \textbf{Positive correlation}: More frequent labels = better agreement (typical)
+\item \textbf{Negative correlation}: Rare labels = better agreement (unusual, investigate)
+\item \textbf{No correlation}: Frequency doesn't affect agreement quality
+\end{itemize}
+
+\subsubsection{Stratified Agreement Comparison Chart}
+\begin{itemize}
+\item \textbf{What it shows}: Agreement quality for rare vs. moderate vs. common labels
+\item \textbf{Business insight}: 
+\begin{itemize}
+\item If rare labels have low agreement → need more training examples
+\item If common labels have low agreement → annotation guidelines unclear
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Frequency Distribution Plot}
+\begin{itemize}
+\item \textbf{What it shows}: How many labels fall into each frequency range
+\item \textbf{Threshold lines}: Show your rare/common cutoff points
+\item \textbf{Business insight}: Understand your dataset balance
+\end{itemize}
+
+\subsubsection{Frequency vs. Agreement Scatter Plot}
+\begin{itemize}
+\item \textbf{What it shows}: Each point is a label, plotted by frequency (x-axis) and agreement (y-axis)
+\item \textbf{Trend line}: Shows overall relationship
+\item \textbf{Business insight}: Identify outlier labels that are problematic
+\end{itemize}
+
+\section{Tab 3: Hierarchical Analysis}
+
+\subsection{Purpose}
+This tab analyzes how well annotators agree at different levels of your label hierarchy. Use this to understand if annotators can agree on broad categories even when they disagree on specifics.
+
+\subsection{Controls and Inputs}
+
+\subsubsection{Analysis Type Dropdown}
+\begin{itemize}
+\item \textbf{Complete Analysis}: Run all types of hierarchical analysis
+\item \textbf{Level Comparison Only}: Just compare L1 vs. L2 vs. Full agreement
+\item \textbf{Conditional Analysis Only}: Just analyze agreement within each parent category
+\item \textbf{Recommendation}: Start with "Complete Analysis"
+\end{itemize}
+
+\subsubsection{Parent Categories Selection}
+\begin{itemize}
+\item \textbf{What it is}: Choose which high-level categories to include
+\item \textbf{Default}: All categories selected
+\item \textbf{When to change}: 
+\begin{itemize}
+\item Focus on specific categories you're concerned about
+\item Compare performance across different category types
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Annotator Selection}
+Same as other tabs - choose which annotators to include.
+
+\subsection{Understanding the Results}
+
+\subsubsection{Hierarchical Level Comparison Chart}
+\begin{itemize}
+\item \textbf{Left panel}: Agreement by hierarchical level
+\begin{itemize}
+\item \textbf{L1 (Parent)}: Agreement on broad categories
+\item \textbf{L2 (Child)}: Agreement on specific sub-types
+\item \textbf{Full Hierarchical}: Agreement on complete labels
+\end{itemize}
+\item \textbf{Right panel}: Label complexity (number of unique labels at each level)
+\item \textbf{Expected pattern}: L1 ≥ L2 ≥ Full (easier to agree on broader categories)
+\end{itemize}
+
+\subsubsection{Conditional Agreement Analysis Chart}
+\begin{itemize}
+\item \textbf{What it shows}: How well annotators agree on sub-categories within each parent category
+\item \textbf{Two bar types}:
+\begin{itemize}
+\item \textbf{L2 Agreement}: Agreement on child labels within each parent
+\item \textbf{Full Agreement}: Agreement on complete labels within each parent
+\end{itemize}
+\item \textbf{Business insight}: Identify which parent categories are most/least problematic
+\end{itemize}
+
+\subsubsection{Parent-Child Combination Heatmap}
+\begin{itemize}
+\item \textbf{What it shows}: Agreement rates for specific parent-child label combinations
+\item \textbf{How to read}: 
+\begin{itemize}
+\item Dark colors = high agreement
+\item Light colors = low agreement
+\item White = insufficient data
+\end{itemize}
+\item \textbf{Business insight}: Identify specific label combinations that need attention
+\end{itemize}
+
+\section{Interpreting Results for Business Decisions}
+
+\subsection{High-Level Health Check}
+\begin{enumerate}
+\item \textbf{Start with Overall Agreement}: Check if α ≥ 0.67 overall
+\item \textbf{Identify Problem Annotators}: Look for low numbers in heatmap rows/columns
+\item \textbf{Check Hierarchical Pattern}: Verify L1 > L2 > Full agreement
+\item \textbf{Assess Frequency Impact}: Understand if rare labels are problematic
+\end{enumerate}
+
+\subsection{Common Scenarios and Actions}
+
+\subsubsection{Scenario 1: Overall Low Agreement (α < 0.67)}
+\textbf{Possible Causes}:
+\begin{itemize}
+\item Unclear annotation guidelines
+\item Insufficient annotator training
+\item Inherently difficult classification task
+\end{itemize}
+\textbf{Actions}:
+\begin{itemize}
+\item Review and clarify annotation guidelines
+\item Provide additional training to all annotators
+\item Consider simplifying label hierarchy
+\end{itemize}
+
+\subsubsection{Scenario 2: One Annotator Consistently Low Agreement}
+\textbf{Identification}: One row/column in heatmap consistently shows low values
+\textbf{Actions}:
+\begin{itemize}
+\item Provide targeted training to that annotator
+\item Review their specific disagreement patterns
+\item Consider temporary removal from annotation tasks
+\end{itemize}
+
+\subsubsection{Scenario 3: L2 Agreement Much Lower Than L1}
+\textbf{Meaning}: Annotators agree on broad categories but struggle with specifics
+\textbf{Actions}:
+\begin{itemize}
+\item Provide more examples of L2 distinctions
+\item Clarify boundaries between similar L2 categories
+\item Consider reducing L2 category complexity
+\end{itemize}
+
+\subsubsection{Scenario 4: Rare Labels Have Very Low Agreement}
+\textbf{Meaning}: Infrequent labels are hard to classify consistently
+\textbf{Actions}:
+\begin{itemize}
+\item Provide more training examples for rare labels
+\item Consider combining very rare labels into broader categories
+\item Implement specialized training for edge cases
+\end{itemize}
+
+\subsection{Quality Thresholds for Decision Making}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Krippendorff's Alpha} & \textbf{Quality Level} & \textbf{Recommended Action} \\
+\hline
+α ≥ 0.8 & Excellent & Continue current process \\
+\hline
+0.67 ≤ α < 0.8 & Good & Minor improvements, monitor trends \\
+\hline
+0.4 ≤ α < 0.67 & Fair & Significant training needed \\
+\hline
+α < 0.4 & Poor & Halt annotation, major process review \\
+\hline
+\end{tabular}
+\caption{Agreement Quality Guidelines}
+\end{table}
+
+\section{Troubleshooting Common Issues}
+
+\subsection{Dashboard Not Loading Results}
+\begin{itemize}
+\item Ensure you've selected at least one annotator
+\item Check that you've clicked the "Calculate" button
+\item Try refreshing the page if analysis seems stuck
+\end{itemize}
+
+\subsection{Unexpected Results}
+\begin{itemize}
+\item \textbf{Very low agreement across all tabs}: Check data quality and annotation guidelines
+\item \textbf{Perfect agreement (α = 1.0)}: May indicate insufficient data or identical annotators
+\item \textbf{Negative alpha values}: Indicates worse-than-random agreement, serious issues
+\end{itemize}
+
+\subsection{Performance Issues}
+\begin{itemize}
+\item Large datasets may take 1-2 minutes to calculate
+\item Reduce number of bootstrap samples if analysis is too slow
+\item Consider analyzing subsets of data for faster iteration
+\end{itemize}
+
+\section{Best Practices}
+
+\subsection{Regular Monitoring}
+\begin{itemize}
+\item Run analysis weekly during annotation projects
+\item Track trends over time, not just absolute values
+\item Set up regular review meetings with annotation team
+\end{itemize}
+
+\subsection{Iterative Improvement}
+\begin{itemize}
+\item Use results to identify specific training needs
+\item Re-run analysis after implementing improvements
+\item Document lessons learned for future annotation projects
+\end{itemize}
+
+\subsection{Data-Driven Decisions}
+\begin{itemize}
+\item Always look at confidence intervals, not just point estimates
+\item Consider business context when interpreting agreement levels
+\item Use multiple metrics together for comprehensive assessment
+\end{itemize}
+
+\section{Conclusion}
+
+The IAA Dashboard provides powerful insights into your annotation quality and helps you make data-driven decisions about annotator training, process improvements, and quality assurance. Regular use of this dashboard will help you maintain high-quality annotations and build reliable machine learning datasets.
+
+Remember: the goal isn't perfect agreement, but sufficient agreement for your business needs. Use these tools to understand your annotation process and continuously improve it.
+
+\end{document}

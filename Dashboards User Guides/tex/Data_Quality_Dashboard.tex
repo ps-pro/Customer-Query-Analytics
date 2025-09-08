@@ -1,0 +1,547 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{framed}
+
+\title{\textbf{Data Quality Dashboard User Guide}}
+\author{PruTech Task C - Customer Query Analytics}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Dashboard Overview}
+
+The Data Quality Dashboard is your command center for maintaining high-quality annotation data. It helps you identify problematic samples, understand annotator performance, and strategically improve your dataset through targeted quality improvements.
+
+\subsection{What This Dashboard Solves}
+\begin{itemize}
+\item \textbf{Quality Control}: Find the most problematic samples requiring review or re-annotation
+\item \textbf{Annotator Performance}: Understand which annotators need additional training
+\item \textbf{Strategic Improvement}: Build better "gold-set" reference data for ongoing quality assurance
+\item \textbf{Cost Optimization}: Focus your quality efforts where they'll have the biggest impact
+\end{itemize}
+
+\subsection{Dashboard Structure}
+The dashboard contains three specialized analysis tabs:
+\begin{enumerate}
+\item \textbf{Top Disagreement Items} - Identify samples with highest annotation disagreement
+\item \textbf{Per-Annotator Confusion} - Analyze individual annotator performance vs. consensus
+\item \textbf{Suggested Gold-Set Refresh} - Get strategic recommendations for quality improvement
+\end{enumerate}
+
+\subsection{Who Should Use This Dashboard}
+\begin{itemize}
+\item \textbf{QA Teams}: Identify samples requiring review and re-annotation
+\item \textbf{Training Managers}: Understand which annotators need focused training
+\item \textbf{Data Scientists}: Build better training datasets with strategic sample selection
+\item \textbf{Project Managers}: Track annotation quality trends and make resource allocation decisions
+\end{itemize}
+
+\section{Getting Started}
+
+\subsection{Basic Navigation}
+\begin{itemize}
+\item \textbf{Theme Toggle}: Light/Dark buttons in top-right corner
+\item \textbf{Tab Selection}: Click any tab name to switch between analyses
+\item \textbf{Configuration Sections}: Each tab has a blue configuration card with controls
+\item \textbf{Calculate Buttons}: Always click the "Calculate" or "Generate" button to run analysis
+\item \textbf{Results Sections}: Scroll down to see charts, tables, and insights after calculation
+\end{itemize}
+
+\subsection{Understanding Result Types}
+\begin{itemize}
+\item \textbf{Disagreement Scores}: 0.0 = perfect agreement, 1.0 = maximum disagreement
+\item \textbf{Agreement Rates}: Percentage of annotators who chose the same label
+\item \textbf{Accuracy Scores}: How often an annotator matches the majority vote
+\item \textbf{Confidence Levels}: Statistical confidence in majority vote decisions
+\end{itemize}
+
+\section{Tab 1: Top Disagreement Items}
+
+\subsection{Purpose}
+This tab identifies the most problematic samples in your dataset - documents where annotators disagree the most. These are prime candidates for review, discussion, and potential re-annotation.
+
+\subsection{When to Use This Tab}
+\begin{itemize}
+\item Weekly quality reviews to identify problematic samples
+\item Before finalizing datasets for machine learning training
+\item When you notice declining annotation quality and need to find root causes
+\item To create discussion materials for annotator training sessions
+\end{itemize}
+
+\subsection{Controls and Configuration}
+
+\subsubsection{Label Type Dropdown}
+\begin{itemize}
+\item \textbf{Full Hierarchical Labels}: Complete labels (e.g., "Technical\_Performance\_Issue")
+\item \textbf{L1 (Parent) Labels}: High-level categories (e.g., "Technical", "Billing")
+\item \textbf{L2 (Child) Labels}: Specific sub-types (e.g., "Performance\_Issue", "Refund\_Request")
+\item \textbf{Recommendation}: Start with "Full Hierarchical" for comprehensive disagreement analysis
+\end{itemize}
+
+\subsubsection{Annotator Selection}
+\begin{itemize}
+\item \textbf{What it controls}: Which annotators to include in disagreement calculations
+\item \textbf{Default}: All annotators selected
+\item \textbf{When to adjust}:
+\begin{itemize}
+\item Remove specific annotators to see if they're causing disagreements
+\item Compare disagreement patterns between different annotator groups
+\item Focus on a core group of experienced annotators
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Top N Samples Dropdown}
+\begin{itemize}
+\item \textbf{Options}: 10, 25, 50, or 100 most disagreeable samples
+\item \textbf{Recommendation}: Start with 25 for manageable review workload
+\item \textbf{Use 50-100}: When conducting comprehensive quality audits
+\item \textbf{Use 10}: For quick daily quality checks
+\end{itemize}
+
+\subsubsection{Disagreement Score Sliders}
+\begin{itemize}
+\item \textbf{Min Disagreement Score (0.0-1.0)}: Exclude samples with too little disagreement
+\item \textbf{Max Disagreement Score (0.0-1.0)}: Exclude samples with extreme disagreement
+\item \textbf{Typical Settings}:
+\begin{itemize}
+\item \textbf{Min: 0.3, Max: 1.0}: Focus on moderately to highly disagreeable samples
+\item \textbf{Min: 0.0, Max: 0.7}: Exclude completely chaotic samples, focus on learnable disagreements
+\item \textbf{Min: 0.5, Max: 1.0}: Only the most problematic samples
+\end{itemize}
+\end{itemize}
+
+\subsection{Understanding the Results}
+
+\subsubsection{Disagreement Patterns Summary Cards}
+\begin{itemize}
+\item \textbf{Total Documents}: Overall dataset size for context
+\item \textbf{Perfect Agreement}: Documents where all annotators agreed (quality baseline)
+\item \textbf{High Disagreement}: Documents requiring immediate attention
+\item \textbf{Average Disagreement}: Overall quality health indicator
+\item \textbf{Most Disagreeable Document}: Worst-case example for review
+\end{itemize}
+
+\subsubsection{Disagreement Distribution Histogram}
+\begin{itemize}
+\item \textbf{X-axis}: Disagreement score (0 = perfect agreement, 1 = maximum disagreement)
+\item \textbf{Y-axis}: Number of documents with that disagreement level
+\item \textbf{Ideal Shape}: Tall peak at left (many documents with low disagreement)
+\item \textbf{Warning Signs}: Flat distribution or peaks toward the right side
+\end{itemize}
+
+\subsubsection{Label Confusion Matrix}
+\begin{itemize}
+\item \textbf{What it shows}: Which labels are most often confused with each other
+\item \textbf{Diagonal}: Correct classifications (darker = more common)
+\item \textbf{Off-diagonal}: Confusion patterns (darker = more confusion)
+\item \textbf{Business insight}: Identify label pairs requiring clearer guidelines
+\end{itemize}
+
+\subsubsection{Text Complexity vs. Disagreement Scatter Plot}
+\begin{itemize}
+\item \textbf{X-axis}: Text length or word count
+\item \textbf{Y-axis}: Disagreement score
+\item \textbf{What to look for}:
+\begin{itemize}
+\item \textbf{Positive correlation}: Longer texts are harder to annotate consistently
+\item \textbf{No correlation}: Text length doesn't affect annotation difficulty
+\item \textbf{Outliers}: Short texts with high disagreement (need guideline clarification)
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Top Disagreement Table}
+\begin{itemize}
+\item \textbf{Columns explained}:
+\begin{itemize}
+\item \textbf{Rank}: Disagreement severity ranking (1 = most disagreeable)
+\item \textbf{Sample ID}: Document identifier for tracking
+\item \textbf{Disagreement Score}: Quantified disagreement level
+\item \textbf{Agreement Rate}: Percentage of annotators who agreed
+\item \textbf{Unique Labels}: Number of different labels assigned
+\item \textbf{Annotator Labels}: What each annotator chose (detailed breakdown)
+\item \textbf{Text Preview}: Sample content for context
+\end{itemize}
+\item \textbf{Sorting}: Click column headers to sort by different criteria
+\item \textbf{Filtering}: Use the filter boxes to search for specific patterns
+\end{itemize}
+
+\subsection{Business Actions Based on Results}
+
+\subsubsection{High Disagreement Samples (Score > 0.7)}
+\textbf{Immediate Actions}:
+\begin{itemize}
+\item Schedule team discussion sessions using these examples
+\item Review and clarify annotation guidelines
+\item Consider if these samples represent edge cases requiring special handling
+\item Re-annotate with expert annotators for gold-set inclusion
+\end{itemize}
+
+\subsubsection{Moderate Disagreement Samples (Score 0.3-0.7)}
+\textbf{Recommended Actions}:
+\begin{itemize}
+\item Use for annotator training exercises
+\item Identify common confusion patterns from the confusion matrix
+\item Develop specific guidance for these challenging scenarios
+\item Consider creating sub-categories for frequently confused labels
+\end{itemize}
+
+\subsubsection{Text Complexity Patterns}
+\textbf{If longer texts have more disagreement}:
+\begin{itemize}
+\item Provide guidelines for handling complex, multi-issue texts
+\item Train annotators to identify primary vs. secondary issues
+\item Consider breaking down complex texts into smaller annotation units
+\end{itemize}
+
+\section{Tab 2: Per-Annotator Confusion}
+
+\subsection{Purpose}
+This tab analyzes individual annotator performance by comparing each annotator's choices against the majority vote consensus. It helps identify which annotators need targeted training and what specific mistakes they're making.
+
+\subsection{When to Use This Tab}
+\begin{itemize}
+\item Monthly annotator performance reviews
+\item Before making training resource allocation decisions
+\item When investigating quality issues affecting specific annotators
+\item To identify high-performing annotators for mentorship roles
+\end{itemize}
+
+\subsection{Controls and Configuration}
+
+\subsubsection{Analysis Mode Dropdown}
+\begin{itemize}
+\item \textbf{Complete Analysis}: Run all performance analyses (recommended)
+\item \textbf{Individual Performance Only}: Focus just on accuracy metrics
+\item \textbf{Pairwise Comparison Only}: Analyze annotator-to-annotator agreement patterns
+\item \textbf{Recommendation}: Use "Complete Analysis" for comprehensive review
+\end{itemize}
+
+\subsubsection{Label Type Dropdown}
+Same options as Tab 1 - choose which level of annotation to analyze for performance.
+
+\subsubsection{Annotator Selection}
+Choose which annotators to include in the performance analysis.
+
+\subsection{Understanding the Results}
+
+\subsubsection{Annotator Performance Ranking}
+\begin{itemize}
+\item \textbf{What it shows}: Accuracy scores for each annotator vs. majority vote
+\item \textbf{Ranking order}: Highest to lowest accuracy
+\item \textbf{Accuracy interpretation}:
+\begin{itemize}
+\item \textbf{90\%$\leq$}: Excellent performance
+\item \textbf{80-89\%}: Good performance  
+\item \textbf{70-79\%}: Needs improvement
+\item \textbf{<70\%}: Requires immediate training intervention
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Systematic Bias Analysis}
+\begin{itemize}
+\item \textbf{What it shows}: Common mistake patterns across all annotators
+\item \textbf{Format}: "True Label → Annotator's Choice (Frequency)"
+\item \textbf{Business insight}: Identify systematic guideline problems affecting multiple annotators
+\end{itemize}
+
+\subsubsection{Pairwise Agreement Matrix}
+\begin{itemize}
+\item \textbf{What it shows}: Agreement rates between each pair of annotators
+\item \textbf{Diagonal}: Always 100\% (annotator agrees with themselves)
+\item \textbf{How to read}: 
+\begin{itemize}
+\item High values (>80\%) = good agreement
+\item Low values (<60\%) = significant disagreement
+\item Patterns can reveal annotator groups or outliers
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Individual Annotator Dropdown}
+\begin{itemize}
+\item \textbf{Purpose}: Select specific annotator to see their detailed confusion matrix
+\item \textbf{Matrix interpretation}:
+\begin{itemize}
+\item \textbf{Y-axis}: True labels (majority vote)
+\item \textbf{X-axis}: Annotator's labels
+\item \textbf{Diagonal}: Correct classifications (should be darkest)
+\item \textbf{Off-diagonal}: Specific mistake patterns
+\end{itemize}
+\end{itemize}
+
+\subsection{Business Actions Based on Results}
+
+\subsubsection{Low-Performing Annotators (<80\% accuracy)}
+\textbf{Immediate Actions}:
+\begin{itemize}
+\item Schedule one-on-one training sessions
+\item Review their confusion matrix to identify specific problem areas
+\item Provide targeted examples for their most common mistakes
+\item Consider temporary quality review for all their annotations
+\end{itemize}
+
+\subsubsection{Systematic Bias Patterns}
+\textbf{When multiple annotators make the same mistakes}:
+\begin{itemize}
+\item Review annotation guidelines for those specific label pairs
+\item Clarify distinction criteria between confused labels
+\item Add more examples to training materials
+\item Consider if label definitions need revision
+\end{itemize}
+
+\subsubsection{Annotator Groups in Pairwise Matrix}
+\textbf{If you see distinct clusters}:
+\begin{itemize}
+\item \textbf{Two high-agreement groups}: May indicate interpretation differences - need alignment
+\item \textbf{One outlier annotator}: Individual training needed
+\item \textbf{Generally low agreement}: Systematic guideline problems
+\end{itemize}
+
+\section{Tab 3: Suggested Gold-Set Refresh}
+
+\subsection{Purpose}
+This tab provides strategic recommendations for building a high-quality "gold-set" of reference annotations. Gold-sets are used for training, quality monitoring, and validating annotation consistency over time.
+
+\subsection{When to Use This Tab}
+\begin{itemize}
+\item Quarterly gold-set reviews and updates
+\item When launching new annotation projects
+\item After major guideline changes require validation
+\item To build training datasets for machine learning models
+\end{itemize}
+
+\subsection{Controls and Configuration}
+
+\subsubsection{Label Type Dropdown}
+Same as other tabs - choose which annotation level to optimize.
+
+\subsubsection{Gold-Set Strategy Dropdown}
+\begin{itemize}
+\item \textbf{High Agreement Only}: Select only samples with strong annotator consensus
+\begin{itemize}
+\item \textbf{Use when}: Building training data or establishing clear examples
+\item \textbf{Benefit}: High confidence in "correct" labels
+\item \textbf{Limitation}: May miss edge cases and difficult scenarios
+\end{itemize}
+\item \textbf{Disagreement Focus}: Select samples with useful levels of disagreement
+\begin{itemize}
+\item \textbf{Use when}: Identifying challenging cases for guideline development
+\item \textbf{Benefit}: Captures difficult edge cases requiring attention
+\item \textbf{Limitation}: Requires expert review to establish "correct" labels
+\end{itemize}
+\item \textbf{Mixed Strategy}: Balanced combination of high-agreement and disagreement samples
+\begin{itemize}
+\item \textbf{Use when}: Building comprehensive gold-sets for ongoing quality monitoring
+\item \textbf{Benefit}: Captures both clear examples and challenging edge cases
+\item \textbf{Recommendation}: Best choice for most scenarios
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Samples Per Label Slider}
+\begin{itemize}
+\item \textbf{Range}: 1-10 samples per unique label
+\item \textbf{Recommendation}: 3-5 samples per label for balanced coverage
+\item \textbf{Higher values (7-10)}: When you need extensive coverage for complex labeling schemes
+\item \textbf{Lower values (1-2)}: For quick gold-set creation or budget constraints
+\end{itemize}
+
+\subsubsection{High Agreement Threshold Slider}
+\begin{itemize}
+\item \textbf{Range}: 60\%-95\% agreement required
+\item \textbf{Default}: 80\%
+\item \textbf{Higher thresholds (90\%+)}: Very strict quality, fewer candidates
+\item \textbf{Lower thresholds (70\%-80\%)}: More inclusive, larger candidate pool
+\end{itemize}
+
+\subsubsection{Disagreement Range Slider}
+\begin{itemize}
+\item \textbf{Purpose}: Define "useful disagreement" levels for challenging examples
+\item \textbf{Range}: 20\%-80\% agreement
+\item \textbf{Typical Setting}: 30\%-60\% (moderate disagreement, still learnable)
+\item \textbf{Avoid}: Very low agreement (<20\%) indicates chaotic, un-learnable samples
+\end{itemize}
+
+\subsubsection{Annotator Selection}
+Choose which annotators to include in the consensus calculations.
+
+\subsection{Understanding the Results}
+
+\subsubsection{Gold-Set Quality Overview Dashboard}
+\begin{itemize}
+\item \textbf{Coverage Metrics}: How well the recommended samples cover all label types
+\item \textbf{Quality Scores}: Confidence levels in the recommended samples
+\item \textbf{Balance Indicators}: Distribution across different agreement levels
+\item \textbf{Total Recommendations}: Number of samples recommended for gold-set inclusion
+\end{itemize}
+
+\subsubsection{Label Coverage Comparison Chart}
+\begin{itemize}
+\item \textbf{What it shows}: How many samples exist vs. how many are recommended for each label
+\item \textbf{Goal}: Roughly equal representation across all important labels
+\item \textbf{Red flags}: Labels with zero or very few recommendations (coverage gaps)
+\end{itemize}
+
+\subsubsection{Candidate Distribution Chart}
+\begin{itemize}
+\item \textbf{High Confidence Candidates}: Samples with strong agreement (training examples)
+\item \textbf{Disagreement Candidates}: Samples with useful disagreement (edge cases)
+\item \textbf{Ideal balance}: Depends on strategy, but generally 60-70\% high confidence, 30-40\% disagreement focus
+\end{itemize}
+
+\subsubsection{Agreement Distribution Scatter Plot}
+\begin{itemize}
+\item \textbf{X-axis}: Document ID or sample index
+\item \textbf{Y-axis}: Agreement level
+\item \textbf{Colored regions}: Show your high agreement and disagreement thresholds
+\item \textbf{Selected points}: Recommended samples for gold-set inclusion
+\end{itemize}
+
+\subsubsection{Recommended Gold-Set Candidates Table}
+\begin{itemize}
+\item \textbf{Columns}:
+\begin{itemize}
+\item \textbf{Sample ID}: Document identifier
+\item \textbf{Label}: Consensus or majority label
+\item \textbf{Agreement Level}: Percentage of annotators who agreed
+\item \textbf{Confidence}: Statistical confidence in the consensus
+\item \textbf{Strategy Type}: High confidence vs. disagreement focus
+\item \textbf{Text Preview}: Sample content for context
+\end{itemize}
+\item \textbf{Actions}: Export this list for gold-set creation workflows
+\end{itemize}
+
+\subsubsection{Coverage Gap Analysis Table}
+\begin{itemize}
+\item \textbf{What it shows}: Labels that are under-represented in recommendations
+\item \textbf{Why gaps occur}:
+\begin{itemize}
+\item Very rare labels with insufficient samples
+\item Labels with consistently poor agreement
+\item Labels that don't meet quality thresholds
+\end{itemize}
+\item \textbf{Actions}: Manual review needed for these labels
+\end{itemize}
+
+\subsection{Business Actions Based on Results}
+
+\subsubsection{High-Quality Recommendations}
+\textbf{For samples with >90\% agreement}:
+\begin{itemize}
+\item Include in training materials immediately
+\item Use as "gold standard" examples in annotator training
+\item Include in automated quality monitoring systems
+\item Consider for machine learning training data
+\end{itemize}
+
+\subsubsection{Moderate Disagreement Samples}
+\textbf{For samples with 30-60\% agreement}:
+\begin{itemize}
+\item Schedule expert review sessions to establish consensus
+\item Use in advanced annotator training for edge cases
+\item Develop specific guidelines for these challenging scenarios
+\item Consider as candidates for label refinement discussions
+\end{itemize}
+
+\subsubsection{Coverage Gaps}
+\textbf{For under-represented labels}:
+\begin{itemize}
+\item Prioritize collecting more examples of these labels
+\item Review if these labels are too rare to be useful
+\item Consider combining very rare labels into broader categories
+\item Manually curate examples if necessary for critical business cases
+\end{itemize}
+
+\section{Best Practices for Data Quality Management}
+
+\subsection{Weekly Quality Workflow}
+\begin{enumerate}
+\item \textbf{Monday}: Run Tab 1 (Disagreement Analysis) to identify problem samples
+\item \textbf{Wednesday}: Review Tab 2 (Annotator Performance) for training needs
+\item \textbf{Friday}: Plan weekend training sessions based on identified issues
+\end{enumerate}
+
+\subsection{Monthly Strategic Review}
+\begin{enumerate}
+\item \textbf{Week 1}: Run comprehensive disagreement analysis
+\item \textbf{Week 2}: Conduct annotator performance reviews
+\item \textbf{Week 3}: Update gold-set using Tab 3 recommendations
+\item \textbf{Week 4}: Implement training improvements and guideline updates
+\end{enumerate}
+
+\subsection{Quality Metrics to Track}
+\begin{itemize}
+\item \textbf{Average disagreement score}: Should decrease over time
+\item \textbf{Perfect agreement percentage}: Should increase over time  
+\item \textbf{Annotator accuracy scores}: Should improve with training
+\item \textbf{Gold-set coverage}: Should be comprehensive across all important labels
+\end{itemize}
+
+\subsection{Red Flags Requiring Immediate Attention}
+\begin{itemize}
+\item \textbf{Disagreement scores increasing week-over-week}
+\item \textbf{Any annotator with <70\% accuracy consistently}
+\item \textbf{Systematic bias patterns affecting multiple annotators}
+\item \textbf{Large coverage gaps in gold-set recommendations}
+\end{itemize}
+
+\section{Integration with Business Processes}
+
+\subsection{QA Team Integration}
+\begin{itemize}
+\item Use disagreement analysis results for weekly review prioritization
+\item Export problem samples for detailed manual review
+\item Track improvement metrics after implementing recommended changes
+\end{itemize}
+
+\subsection{Training Team Integration}
+\begin{itemize}
+\item Use annotator performance data for personalized training plans
+\item Incorporate high-disagreement samples into training materials
+\item Monitor training effectiveness through improved accuracy scores
+\end{itemize}
+
+\subsection{Data Science Team Integration}
+\begin{itemize}
+\item Use gold-set recommendations for machine learning training data
+\item Validate model performance using high-confidence samples
+\item Identify data collection priorities based on coverage gap analysis
+\end{itemize}
+
+\section{Troubleshooting}
+
+\subsection{Common Issues}
+\begin{itemize}
+\item \textbf{No results after clicking Calculate}: Ensure annotators are selected and thresholds are reasonable
+\item \textbf{Very few recommendations}: Lower quality thresholds or expand disagreement ranges
+\item \textbf{Performance analysis showing all low scores}: Check if majority vote calculation is working correctly
+\end{itemize}
+
+\subsection{Data Quality Issues}
+\begin{itemize}
+\item \textbf{Extremely high disagreement across all samples}: Review annotation guidelines for clarity
+\item \textbf{No coverage gaps but poor agreement}: Focus on annotator training rather than sample selection
+\item \textbf{Perfect agreement everywhere}: May indicate insufficient annotation diversity or complexity
+\end{itemize}
+
+\section{Conclusion}
+
+The Data Quality Dashboard provides comprehensive tools for maintaining and improving annotation quality. Regular use of all three tabs creates a complete quality management workflow:
+
+\begin{itemize}
+\item \textbf{Identify Problems}: Tab 1 finds the most challenging samples
+\item \textbf{Understand Causes}: Tab 2 reveals annotator-specific issues  
+\item \textbf{Strategic Improvement}: Tab 3 guides targeted quality investments
+\end{itemize}
+
+Success comes from consistent usage, data-driven decision making, and continuous improvement based on the insights provided. Use this dashboard as your central hub for all annotation quality management activities.
+
+\end{document}
