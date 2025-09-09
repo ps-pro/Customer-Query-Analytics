@@ -44,10 +44,10 @@ We selected \textbf{LLM Based Synthetic Data Generation with Multi-Annotator Sim
 
 \subsection{Core Strategy}
 \begin{itemize}
-\item Generate 50 hyper-realistic customer support tickets across three difficulty tiers
+\item Generate around 2000 hyper-realistic customer support tickets across three difficulty tiers
 \item Simulate 7 distinct annotator personas with varying skill levels and biases
 \item Implement controlled policy ambiguities to create realistic disagreement patterns
-\item Use tiered complexity (Easy: 15, Medium: 15, Hard: 20 samples) for comprehensive analysis
+\item Use tiered complexity (Easy: 30\%, Medium: 30\%, Hard: 40\% samples) for comprehensive analysis
 \end{itemize}
 
 \subsection{Annotator Simulation Framework}
@@ -59,9 +59,9 @@ We selected \textbf{LLM Based Synthetic Data Generation with Multi-Annotator Sim
 
 \subsection{Complexity Stratification}
 \begin{itemize}
-\item \textbf{Easy Tickets (15)}: Clear, unambiguous requests with high expected agreement
-\item \textbf{Medium Tickets (15)}: Policy ambiguities testing L1/L2 boundary decisions
-\item \textbf{Hard Tickets (20)}: Stream-of-consciousness, emotionally charged, multi-issue scenarios
+\item \textbf{Easy Tickets (30\%)}: Clear, unambiguous requests with high expected agreement
+\item \textbf{Medium Tickets (30\%)}: Policy ambiguities testing L1/L2 boundary decisions
+\item \textbf{Hard Tickets (40\%)}: Stream-of-consciousness, emotionally charged, multi-issue scenarios
 \end{itemize}
 
 \section{Rationale}
@@ -98,7 +98,7 @@ We selected \textbf{LLM Based Synthetic Data Generation with Multi-Annotator Sim
 \begin{itemize}
 \item \textbf{Synthetic Bias}: Generated content may miss nuances of real customer language
 \item \textbf{Limited Vocabulary}: Constrained to AI-generated linguistic patterns
-\item \textbf{Scale Constraints}: 50 samples sufficient for proof-of-concept but limited for production training
+\item \textbf{Scale Constraints}: 2000 samples sufficient for proof-of-concept but limited for production training
 \item \textbf{Domain Gaps}: May not capture industry-specific terminology or edge cases
 \end{itemize}
 
@@ -140,7 +140,7 @@ We selected \textbf{LLM Based Synthetic Data Generation with Multi-Annotator Sim
 
 \subsection{Evolution Path}
 \begin{itemize}
-\item \textbf{Scale Expansion}: Generate larger datasets (500+ samples) for production model training
+\item \textbf{Scale Expansion}: Generate larger datasets (50000+ samples) for production model training
 \item \textbf{Real Data Integration}: Incorporate anonymized real samples for validation
 \item \textbf{Domain Extension}: Adapt generation framework for other business contexts
 \item \textbf{Dynamic Generation}: Real-time synthetic data creation for continuous testing
