@@ -1,0 +1,143 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+\setlist[enumerate]{itemsep=0.5em}
+\setlist[itemize]{itemsep=0.3em}
+
+\title{\textbf{Comparative Analysis of Customer Support Ticket Classification: \\Policy Evaluation and Improvement Recommendations}}
+\author{Classification Performance Study}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Executive Summary}
+
+This report presents a comparative analysis between the existing Customer Support Ticket Classification Policy v1.0 and empirical classification results using rule-based and fuzzy matching approaches. The analysis reveals critical ambiguities in the current policy framework that contribute to systematic misclassification patterns. Key findings indicate that 189 errors occur in distinguishing Technical Issue Login Issues from Account Management Password Resets under rule-based classification, with fuzzy matching showing 230 errors for the same pattern.
+
+\section{Current Policy Framework Analysis}
+
+\subsection{Policy Structure Overview}
+
+The existing labeling policy employs a two-tier hierarchical classification system with three Level 1 parent categories: Technical Issue, Billing, and Account Management. Each parent category contains specific Level 2 child labels designed to route tickets to appropriate specialist teams.
+
+\subsection{Identified Policy Ambiguities}
+
+The current policy contains several critical ambiguities that directly impact classification accuracy:
+
+\subsubsection{Primary Request Ambiguity}
+The policy states: \textit{"If a ticket mentions topics from multiple categories, the label should reflect the user's primary request for action."} However, the term "primary request for action" remains undefined, creating systematic confusion in multi-issue tickets.
+
+\subsubsection{Login Issue vs Password Reset Confusion}
+The policy defines Login Issue as \textit{"The user reports being unable to access or sign into their account"} and Password Reset as \textit{"The user has forgotten their password and is requesting a way to set a new one."} The relationship between these categories lacks clarification when password issues cause login failures.
+
+\subsubsection{Billing Category Overlaps}
+Definitions for Refund Request (\textit{"The user is explicitly asking to have money returned to them"}) and Unrecognized Charge (\textit{"The user does not recognize a charge on their account and suspects it may be fraudulent or incorrect"}) create overlap when users request refunds for unrecognized charges.
+
+\section{Classification Performance Analysis}
+
+\subsection{Rule-Based Classification Results}
+
+The rule-based approach identified five primary error patterns:
+
+\begin{enumerate}
+\item \textbf{Technical Issue Login Issue → Account Management Password Reset} (189 errors): Highest frequency misclassification indicating fundamental policy ambiguity
+\item \textbf{Technical Issue Login Issue → Unknown} (74 errors): Cases where rule-based system cannot determine appropriate classification
+\item \textbf{Billing Unrecognized Charge → Billing Refund Request} (51 errors): Confusion between charge inquiry and refund request
+\item \textbf{Billing Refund Request → Technical Issue Feature Bug} (49 errors): Misclassification when technical issues prompt refund requests
+\item \textbf{Billing Unrecognized Charge → Unknown} (46 errors): Insufficient rules for charge-related edge cases
+\end{enumerate}
+
+\subsection{Fuzzy Matching Classification Results}
+
+The fuzzy matching approach revealed similar but intensified patterns:
+
+\begin{enumerate}
+\item \textbf{Technical Issue Login Issue → Account Management Password Reset} (230 errors): 22\% increase from rule-based approach
+\item \textbf{Billing Refund Request → Account Management Close Account} (91 errors): New pattern indicating training data insufficiency
+\item \textbf{Billing Refund Request → Account Management Password Reset} (73 errors): Cross-category confusion
+\item \textbf{Technical Issue Login Issue → Account Management Close Account} (62 errors): Login issues misinterpreted as account closure requests
+\item \textbf{Technical Issue Feature Bug → Account Management Update Personal Info} (51 errors): Feature functionality confused with profile management
+\end{enumerate}
+
+\section{Comparative Analysis}
+
+\subsection{Common Error Patterns}
+
+Both classification methods demonstrate consistent difficulty with the Technical Issue Login Issue vs Account Management Password Reset distinction, representing the most significant policy gap. This pattern accounts for the highest error frequency across both approaches.
+
+\subsection{Method-Specific Variations}
+
+Rule-based classification shows more conservative error patterns focused on policy-defined boundaries, while fuzzy matching exhibits broader cross-category confusion, suggesting insufficient training examples for boundary cases.
+
+\section{Improvement Recommendations}
+
+\subsection{Policy Framework Enhancements}
+
+\subsubsection{Clarify Primary Request Definition}
+Establish explicit criteria for determining "primary request for action" by implementing a decision hierarchy:
+\begin{itemize}
+\item Immediate user-requested action takes precedence over underlying causes
+\item When multiple actions are requested, prioritize the action requiring specialist intervention
+\item Document specific examples for common multi-issue scenarios
+\end{itemize}
+
+\subsubsection{Resolve Login vs Password Reset Ambiguity}
+Add explicit rule: \textit{"When users cannot log in due to password-related issues, classify as Login Issue. Password Reset applies only when users specifically request password change assistance without login context."}
+
+\subsubsection{Clarify Billing Category Boundaries}
+Establish precedence rule: \textit{"When users request refunds for unrecognized charges, classify as Refund Request as this represents the explicit action requested."}
+
+\subsection{Rule-Based System Improvements}
+
+Based on error pattern analysis, implement additional rules to distinguish:
+\begin{itemize}
+\item Technical Issue Login Issue from Account Management Password Reset through context analysis
+\item Billing Unrecognized Charge from Billing Refund Request based on explicit refund language
+\item Technical issue root causes from resulting customer actions (refunds, account closure)
+\end{itemize}
+
+\subsection{Fuzzy Matching System Improvements}
+
+Address training data gaps by adding examples for:
+\begin{itemize}
+\item Technical Issue Login Issue boundary cases to prevent Account Management misclassification
+\item Billing Refund Request scenarios to distinguish from Account Management actions
+\item Cross-category scenarios where technical issues lead to account management requests
+\end{itemize}
+
+\section{Implementation Priority}
+
+\subsection{High Priority}
+\begin{enumerate}
+\item Address Technical Issue Login Issue vs Account Management Password Reset distinction (affects 189-230 cases)
+\item Define explicit "primary request for action" criteria
+\item Establish billing category precedence rules
+\end{enumerate}
+
+\subsection{Medium Priority}
+\begin{enumerate}
+\item Expand rule coverage for edge cases leading to "Unknown" classifications
+\item Enhance training data for fuzzy matching cross-category scenarios
+\item Develop validation framework for policy changes
+\end{enumerate}
+
+\section{Conclusion}
+
+The analysis reveals that current policy ambiguities directly correlate with systematic classification errors. The Technical Issue Login Issue vs Account Management Password Reset confusion represents the most critical policy gap, requiring immediate attention. Implementation of the recommended policy clarifications and system improvements should significantly reduce misclassification rates and improve ticket routing efficiency.
+
+The comparative analysis demonstrates that while rule-based systems exhibit more predictable error patterns, fuzzy matching approaches require enhanced training data to address cross-category confusion. Both approaches would benefit from the proposed policy framework enhancements.
+
+\end{document}
