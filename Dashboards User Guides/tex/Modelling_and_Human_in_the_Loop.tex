@@ -155,14 +155,14 @@ After clicking "Analyze Performance", you'll see several visualization sections:
             \item 90\%+ = Excellent performance
             \item 80-89\% = Good performance
             \item 70-79\% = Acceptable performance
-            \item <70\% = Needs improvement
+            \item $<$70\% = Needs improvement
         \end{itemize}
     \item \textbf{F1-Score}: Balanced measure of precision and recall (0.0-1.0)
         \begin{itemize}
             \item 0.9+ = Excellent
             \item 0.8-0.89 = Good
             \item 0.7-0.79 = Acceptable
-            \item <0.7 = Needs improvement
+            \item $<$0.7 = Needs improvement
         \end{itemize}
 \end{itemize}
 
@@ -188,9 +188,9 @@ If you see many predictions with low confidence (<0.5), this indicates the class
     \item \textbf{Higher accuracy classifier}: Consider for primary automated routing
     \item \textbf{Average confidence}: Use as threshold for manual review
         \begin{itemize}
-            \item Route high-confidence predictions (>0.8) automatically
+            \item Route high-confidence predictions ($>$0.8) automatically
             \item Send medium-confidence (0.5-0.8) for human review
-            \item Flag low-confidence (<0.5) for immediate attention
+            \item Flag low-confidence ($<$0.5) for immediate attention
         \end{itemize}
 \end{itemize}
 
@@ -405,9 +405,9 @@ Provides a safe environment to test how your rules and examples perform on sampl
 Based on classifier performance, implement tiered routing:
 
 \begin{itemize}
-    \item \textbf{High confidence (>0.8)}: Automatic routing to specialist teams
+    \item \textbf{High confidence ($>$0.8)}: Automatic routing to specialist teams
     \item \textbf{Medium confidence (0.5-0.8)}: Queue for quick human verification
-    \item \textbf{Low confidence (<0.5)}: Priority manual classification
+    \item \textbf{Low confidence ($<$0.5)}: Priority manual classification
 \end{itemize}
 
 \subsubsection{Resource Allocation}
@@ -439,7 +439,7 @@ Based on classifier performance, implement tiered routing:
 Set up monitoring for:
 \begin{itemize}
     \item Accuracy drops below 80\%
-    \item >30\% of predictions have confidence <0.6
+    \item $>$30\% of predictions have confidence <0.6
     \item Sudden increase in specific error patterns
     \item New categories appearing frequently in "Unknown" classifications
 \end{itemize}
@@ -466,7 +466,7 @@ Set up monitoring for:
 
 \subsection{Performance Issues}
 
-\subsubsection{Low Overall Accuracy (<70\%)}
+\subsubsection{Low Overall Accuracy ($<$70\%)}
 \textbf{Potential causes}:
 \begin{itemize}
     \item Insufficient training data
